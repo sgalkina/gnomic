@@ -36,25 +36,15 @@ guidelines apply:
 - Lower-case names are assumed to be genes or other components unless an accession number is given
 - Accessions are encouraged to be database cross references in the format ``DATABASE:ID``.
 
-#### Terms
+#### Language terms
 
-
-
-============== =========================================
-Term           Description
-============== =========================================
-``gene``       a ``feature`` that is a gene
-``feature``    a named DNA sequence such as a gene,
-               promoter, or terminator
-``locus``      a ``feature`` (typically a ``gene``) with
-               a specific location inside the genome of
-               the original strain
-``Phene``      an identifier for a characteristic or
-               trait which can be present in two or more
-               designated variations
-``marker``     a phenotype important for its role as a 
-               selection marker
-============== =========================================
+Term           | Description
+-------------- | --------------
+``gene``       | a ``feature`` that is a gene
+``feature``    | a named DNA sequence such as a gene, promoter, or terminator
+``locus``      | a ``feature`` (typically a ``gene``) with a specific location inside the genome of the original strain
+``Phene``      | an identifier for a characteristic or trait which can be present in two or more designated variations
+``marker``     | a phenotype important for its role as a selection marker
 
 
 #### Missing/not yet finalized
@@ -87,16 +77,22 @@ Term           Description
 | `Abc-` | Abc mutant phenotype |
 
 
+## JSON format
+
+TODO
+
 ## Planned features
 
 - Automatic resolution & validation hooks for feature names, mutations, phenotypes, markers
 - JSON schema
+- NPM package
 
 ## Contributions
 
 Are very welcome. Please contact the author (Lars Schöning) if you would like to collaborate on any significant changes.
 
 ## References
+
 
 - [Wikipedia -- Bacterial genetic nomenclature](http://en.wikipedia.org/wiki/Bacterial_genetic_nomenclature)
 - [Journal of Bacteriology -- Instructions to Authors](http://jb.asm.org/site/misc/journal-ita_nom.xhtml#03)
