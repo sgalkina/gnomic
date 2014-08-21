@@ -74,7 +74,7 @@ Term           | Description
 | `efgH::abcD` | insertion of feature 'abcD' at the location of 'efgH' |
 | `abcD(cr)` | insertion of gene 'abcD' with 'cr' (i.e. cold-resistant) mutation |
 | `Pmtr:abcD:Trmt` | insertion of the fusion of features 'Pmtr', 'abcD', 'Trmt' with implied types of 'promotor', 'gene' and 'terminator' |
-| `abcD:efgH:His5*`` | insertion of genes 'abcD' and 'efgH' next to each other using the 'His5' selection marker |
+| `abcD:efgH:His5*` | insertion of genes 'abcD' and 'efgH' next to each other using the 'His5' selection marker |
 | `Abc+` | Abc wild-type phenotype |
 | `Abc-` | Abc mutant phenotype |
 
