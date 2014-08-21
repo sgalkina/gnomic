@@ -10,6 +10,7 @@ Designation                                 | Language expression
 ------------------------------------------- | -------------------------
 `gene` deleted                              | ``-gene``
 `gene` inserted                             | ``gene`` or ``+gene``
+`gene` of `organism`                        | ``organism/gene``
 `gene` with mutation designation            | ``gene(mutation-designation)``
 `gene` with accession number                | ``gene#GB:123456``
 `gene` from accession number                | ``#GB:123456``
@@ -50,8 +51,7 @@ Term           | Description
 #### Missing/not yet finalized
 
 - gene organisms:
-  - could be part of the mutation definition (e.g. `abcD(Ecoli)`)
-  - alternatively could do `Ecoli/abcD` 
+  - could instead be part of the mutation definition (e.g. `abcD(Ecoli)`)
   - Accession numbers would generally be preferred.
 - reliable way to distinguish between gene and phenotype
   e.g. A phenotype must begin with an upper-case letter and/or be in the list of possible phenotypes.
@@ -68,11 +68,13 @@ Term           | Description
 | `#SGD:YOR202W` | insertion of yeast gene 'YOR202W' referenced in the [Saccharomyces Genome Database (SGD)](http://www.yeastgenome.org/)|
 | `-CAB5#SGD:YDR196C` | deletion of yeast gene 'YDR196C' with standard name 'GAB5' referenced in [SGD](http://www.yeastgenome.org/) ]|
 | `-abcD` | deletion of feature 'abcD' in the parent strain |
+| `+E.coli/abcD` | insertion of E.coli gene 'abcD' |
 | `+abcD::His5*` | insertion of feature 'abcD' using the 'His5' selection marker |
 | `-efgH::abcD` | insertion of feature 'abcD' at the location of 'efgH', replacing (deleting) 'efgH' |
 | `efgH::abcD` | insertion of feature 'abcD' at the location of 'efgH' |
 | `abcD(cr)` | insertion of gene 'abcD' with 'cr' (i.e. cold-resistant) mutation |
 | `Pmtr:abcD:Trmt` | insertion of the fusion of features 'Pmtr', 'abcD', 'Trmt' with implied types of 'promotor', 'gene' and 'terminator' |
+| `abcD:efgH:His5*`` | insertion of genes 'abcD' and 'efgH' next to each other using the 'His5' selection marker |
 | `Abc+` | Abc wild-type phenotype |
 | `Abc-` | Abc mutant phenotype |
 
