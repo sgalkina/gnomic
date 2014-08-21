@@ -7,11 +7,16 @@ designation_list
 
 designation
 	= phenotype
+        / marker_presence
         / genotype
 
 list_separator
     = sep* "," sep*
     / sep+
+
+marker_presence
+    = "+"? marker:identifier "*" { return { marker: { name: marker, used: true } } }
+    / "-" marker:identifier "*" { return { marker: { name: marker, used: false } } } 
 
 phenotype
 	= p:phene "+" { return { phenotype: { name: p, mutation: 'wild-type' } } }
@@ -89,7 +94,7 @@ integer "integer"
     = digits:[0-9]+ { return parseInt(digits.join(""), 10); }
 
 identifier
-    = $([A-Za-z0-9-][A-Za-z0-9]*)
+    = $([A-Za-z0-9]+([A-Za-z0-9_-]+[A-Za-z0-9])?)
 
 sep
 	= [ \t\r\n]
