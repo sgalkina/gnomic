@@ -53,9 +53,10 @@ File-save spaces between statements | `insert_gene1___delete_gene2` (eqv. `+gene
 
 Designation                                 | Language expression
 ------------------------------------------- | -------------------------
-coding bases 123-345 of `gene` | `gene(c.123_345)` or `gene[c.123_345]`
-coding bases 123-345 of `gene` with `cr` mutation designation | `gene(cr; c.123_345)` or `gene(cr)(c.123_345)` or `gene(cr)[c.123_345]`
-feature name containing spaces or underscores | `"some feature name"` 
+coding bases 123-345 of `gene` | e.g. `gene(c.123_345)` or `gene[c.123_345]`
+coding bases 123-345 of `gene` with `cr` mutation designation | e.g. `gene(cr; c.123_345)` or `gene(cr)(c.123_345)` or `gene(cr)[c.123_345]`
+feature name containing spaces or underscores | e.g. `"some feature name"` or `{some feature name}`
+use of `plasmid` to perform `statement` | TBD.
 
 ### Ambiguity
 
@@ -66,7 +67,7 @@ guidelines apply:
 - Lower-case names are assumed to be genes or other components unless an accession number is given
 - Accessions are encouraged to be database cross references in the format ``DATABASE:ID``.
 - The use of the marker designator `*` is only required if the marker is unknown to the implementation.
-- A standard for identifying promoters, terminators and other features should be employed on an organizational level; possibly through a consistent prefix. e.g. `p.XYZ` for promoters.
+- A standard for identifying promoters, terminators and other features should be employed on an organizational level; possibly through a consistent prefix. e.g. `P.XYZ` for promoters.
 
 ### Language terms
 
@@ -77,18 +78,6 @@ Term           | Description
 ``locus``      | a ``feature`` (typically a ``gene``) with a specific location inside the genome of the original strain
 ``Phene``      | an identifier for a characteristic or trait which can be present in two or more designated variations
 ``Marker``     | a phenotype important for its role as a selection marker
-
-
-#### Missing/not yet finalized
-
-- gene organisms:
-  - could instead be part of the mutation definition (e.g. `abcD(Ecoli)`)
-  - Accession numbers would generally be preferred.
-- reliable way to distinguish between gene and phenotype
-  e.g. A phenotype must begin with an upper-case letter and/or be in the list of possible phenotypes.
-- Use of `*` to distinguish markers from other phenotypes/loci is both required by the language definition to 
-  avoid clashes with loci — and is easily forgotten
-- accommodate different methods for down-regulation and possible required additional information
 
 
 ## Examples
