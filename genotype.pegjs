@@ -7,11 +7,16 @@ designation_list
 
 designation
 	= phenotype
-	/ genotype
+        / marker_presence
+        / genotype
 
 list_separator
     = sep* "," sep*
     / sep+
+
+marker_presence
+    = "+"? marker:identifier "*" { return { marker: { name: marker, used: true } } }
+    / "-" marker:identifier "*" { return { marker: { name: marker, used: false } } } 
 
 phenotype
 	= p:phene "+" { return { phenotype: { name: p, mutation: 'wild-type' } } }
@@ -29,8 +34,8 @@ genotype_with_locus
 	/ locus:identifier "::" i:insertable { return { type: 'insertion', atLocus: locus, of: i } } 
 	
 genotype_without_locus
-	= "-" g:gene_feature { return { type: 'deletion', of: g, } }
-	/ "+" g:gene_feature { return { type: 'insertion', of: g } }
+	= "-" g:gene_feature { return { type: 'deletion', of: g } }
+	/ "+" i:insertable { return { type: 'insertion', of: i } }
 	/ g:gene_feature "^^" { return { type: 'upRegulation', of: g, multiple: true } }
 	/ g:gene_feature "^" { return { type: 'upRegulation', of: g, } }
 	/ g:gene_feature "<" { return { type: 'downRegulation', of: g, } }
@@ -49,6 +54,10 @@ feature
 	/ gene_feature
 
 gene_feature
+        = o:organism "/" g:gene_feature_pt2 { g.feature.organism = o; return g }
+        / gene_feature_pt2
+
+gene_feature_pt2
    	= "#" a:accession { return { feature: { accession: a } } }
 	/ n:gene m:mutation "#" a:accession { return { feature: { name: n, mutation: m, accession: a, type: 'gene' } } }
 	/ n:gene "#" a:accession { return { feature: { name: n, accession: a, type: 'gene' } } }
@@ -56,10 +65,14 @@ gene_feature
 	/ n:gene { return { feature: { name: n, weakType: 'gene' } } }
 
 gene
-    = $([a-z][a-zA-Z0-9]+)
+    = $([a-zA-Z0-9]+)
 
 phene
     = $([A-Z][a-zA-Z0-9]+)
+
+organism
+    = $([a-zA-Z0-9]+("."[a-zA-Z0-9]+)?)
+
 
 mutation
     = "(" mutation:identifier ")" { return mutation }
@@ -81,7 +94,7 @@ integer "integer"
     = digits:[0-9]+ { return parseInt(digits.join(""), 10); }
 
 identifier
-    = $([A-Za-z0-9-][A-Za-z0-9]*)
+    = $([A-Za-z0-9]+([A-Za-z0-9_-]+[A-Za-z0-9])?)
 
 sep
 	= [ \t\r\n]
