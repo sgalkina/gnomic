@@ -27,9 +27,6 @@ Designation                                 | Language expression
 `gene` with mutation designation            | ``gene(mutation-designation)``
 `gene` with accession number                | ``gene#GB:123456``
 `gene` from accession number                | ``#GB:123456``
-`gene` up-regulated                         | ``gene^``
-`gene` up-regulated multiple insertion      | ``gene^^``
-`gene` down-regulated                       | ``gene<``
 fusion of `feature1` and `feature2`         | ``feature1:feature2``
 `gene` with `promoter`                      | ``promoter:gene``
 `gene` with `promoter` & `terminator`       | ``promoter:gene:terminator``
