@@ -10,8 +10,9 @@ The purpose of the language is to provide a clear, unambiguous, human and machin
 ### Typical stakeholders
 
 - Modelers: care mostly about what genes where added or deleted or over and underexpressed
-- Cultivators: care mostly about auxotrophies & prototrophies described in the Phenotype
-- Genome Engineers: care about everything at the low level
+- Cultivators: care mostly about required supplements as described by the Phenotype
+- Genome Engineers: care about everything at the lowest level
+
 
 
 ## Language definition
@@ -32,41 +33,45 @@ Designation                                 | Language expression
 fusion of `feature1` and `feature2`         | ``feature1:feature2``
 `gene` with `promoter`                      | ``promoter:gene``
 `gene` with `promoter` & `terminator`       | ``promoter:gene:terminator``
-`gene` inserted at `locus`                  | ``locus::gene``
-`locus` replaced with `gene`                | ``-locus::gene``
-`gene` inserted at `locus` using `Marker`   | ``locus::gene::Marker+``
+`gene` inserted at `site`                  | ``site::gene``
+`site` replaced with `gene`                | ``-site::gene``
+`gene` inserted at `site` using `Marker`   | ``site::gene::Marker+``
 `Phenotype`: wild-type                      | ``Phene+`` or ``Phene(wild-type)``
 `Phenotype`: mutant                         | ``Phene-`` or ``Phene`` or ``Phene(mutant)``
-`Phenotype` or `Marker` of a certain source organism | `organism/Phene+` or `organism/Marker*`
-`selection marker` used                     | ``Marker*``
-`selection marker` available                | ``Marker*-``
+`Phenotype` or `Marker` of a certain source organism | `organism/Phene+` or `organism/Marker+`
+`selection marker` used                     | ``Marker+``
+`selection marker` available                | ``Marker-``
+a non-integrated episome | ``(<feature, [...]>)``
+episome with selection marker | ``(<feature, [...]>)::Marker+``
+integrated vector with mandatory integration site | ``site::(<feature, [...]>)``
+nucleotide range of a `feature` | ``feature[startBase_endBase]``
+coding nucleotide range of a `gene` | ``gene[c.startBase_endBase]``
+named `vector` containing `geneA` and `geneB` integrated at `site` | ``site::vector(geneA geneB)``
+
 
 ### Proposed Excel- and File-safe extensions
 
 Designation                                 | Language expression
 ------------------------------------------- | -------------------------
-Excel & file-safe insertion, deletion or replacement          | `insert_gene` (eqv. `+gene`), `delete_gene` (eqv. ``-gene``), `replace_locus::gene` (eqv. `-locus::gene`)
-File-safe use of loci and markers           | `insert_gene_at_locus_using_markers` (eqv. `+locus::gene::marker`), `replace_locus_with_gene` or `-locus_with_gene` (eqv. `-locus::gene`)
+Excel & file-safe insertion, deletion or replacement          | `insert_gene` (eqv. `+gene`), `delete_gene` (eqv. ``-gene``), `replace_site::gene` (eqv. `-site::gene`)
+File-safe use of loci and markers           | `insert_gene_at_site_using_markers` (eqv. `+site::gene::marker`), `replace_site_with_gene` or `-site_with_gene` (eqv. `-site::gene`)
 File-save spaces between statements | `insert_gene1___delete_gene2` (eqv. `+gene1, -gene2`)
 
 ### Proposed language additions 
 
 Designation                                 | Language expression
 ------------------------------------------- | -------------------------
-coding bases 123-345 of `gene` | e.g. `gene(c.123_345)` or `gene[c.123_345]`
-coding bases 123-345 of `gene` with `cr` mutation designation | e.g. `gene(cr; c.123_345)` or `gene(cr)(c.123_345)` or `gene(cr)[c.123_345]`
 feature name containing spaces or underscores | e.g. `"some feature name"` or `{some feature name}`
-use of `plasmid` to perform `statement` | TBD.
+
 
 ### Ambiguity
 
 This language definition alone does not avoid all ambiguity in the specification. The following assumptions and
 guidelines apply:
 
-- Upper-case names are assumed to be phenotypes unless an accession number is given
-- Lower-case names are assumed to be genes or other components unless an accession number is given
-- Accessions are encouraged to be database cross references in the format ``DATABASE:ID``.
-- The use of the marker designator `*` is only required if the marker is unknown to the implementation.
+- Phenotypes must always end with `+` or `-` or a custom type designation.
+- Lower-case names are assumed to be genes or other features
+- Accessions must be database cross references in the format ``DATABASE:ID``.
 - A standard for identifying promoters, terminators and other features should be employed on an organizational level; possibly through a consistent prefix. e.g. `P.XYZ` for promoters.
 
 ### Language terms
@@ -75,7 +80,7 @@ Term           | Description
 -------------- | --------------
 ``gene``       | a ``feature`` that is a gene
 ``feature``    | a named DNA sequence such as a gene, promoter, or terminator
-``locus``      | a ``feature`` (typically a ``gene``) with a specific location inside the genome of the original strain
+``site``      | a ``feature`` (such as a ``gene``) with a specific location inside the genome of the original strain
 ``Phene``      | an identifier for a characteristic or trait which can be present in two or more designated variations
 ``Marker``     | a phenotype important for its role as a selection marker
 
@@ -84,7 +89,7 @@ Term           | Description
 
 | Example code | Description                          |
 | ------------------------------------- | ------------------------------------- |
-| `X-1::abcD:defG::M2, XII-2::hijK::M2, M3- ` | insert `abcD` and `defG` at `X-1` using `M1` marker, insert `hijK` at `XII-2` using `M2` marker, state that `M3` marker is available (mutant) in strain
+| `X-1::(abcD defG)::M2, XII-2::hijK::M2, M3- ` | integrate vector containg `abcD` and `defG` at `X-1` using `M1` marker, insert `hijK` at `XII-2` using `M2` marker, state that `M3` marker is available (mutant) in strain
 | `#SGD:YOR202W` | insertion of yeast gene 'YOR202W' referenced in the [Saccharomyces Genome Database (SGD)](http://www.yeastgenome.org/)|
 | `-CAB5#SGD:YDR196C` | deletion of yeast gene 'YDR196C' with standard name 'GAB5' referenced in [SGD](http://www.yeastgenome.org/) ]|
 | `+E.coli/abcD::Leu2+` | insertion of _E.coli_ gene 'abcD' using 'Leu2' selection marker 
@@ -97,8 +102,9 @@ Term           | Description
 | `abcD:efgH:His5+` | insertion of genes 'abcD' and 'efgH' next to each other using the 'His5' selection marker |
 | `Abc+` | Abc wild-type phenotype |
 | `Abc-` | Abc mutant phenotype |
-| `-Abc::loxP:KanMX:loxP` | Deletion/disruption of `Abc` using a fusion of `loxP:KanMX:loxP` (XXX: this might rather be `-Abc::loxP::KanMX`, must verify)
-
+| `-loxP:KanMX:loxP::loxP` | Replacement of `loxP:KanMX:loxP` with `loxP`| 
+| `X-1::p123(geneA, geneB)::KanMX+` | Integration of `p123` containing `geneA` and `geneB` at `X-1` using `KanMX` marker |
+ 
 
 ## JSON format
 
@@ -113,7 +119,7 @@ TODO
 
 ## Contributions
 
-Are very welcome. Please contact the author (Lars Schöning) if you would like to collaborate on any significant changes.
+Are very welcome. Please contact the author (Lars Schöning) if you would like to propose on any significant/breaking changes.
 
 ## References
 
