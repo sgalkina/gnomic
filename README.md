@@ -32,6 +32,8 @@ fusion of `feature1` and `feature2`         | ``feature1:feature2``
 `gene` with `promoter` & `terminator`       | ``promoter:gene:terminator``
 `gene` inserted at `site`                  | ``site::gene``
 `site` replaced with `gene`                | ``-site::gene``
+`site` substituted with `gene`             | ``site>gene`` (equivalent to replaced)
+`site` occuring multiple times substituted with `gene` | ``site>>gene``
 `gene` inserted at `site` using `Marker`   | ``site::gene::Marker+``
 `Phenotype`: wild-type                      | ``Phene+`` or ``Phene(wild-type)``
 `Phenotype`: mutant                         | ``Phene-`` or ``Phene`` or ``Phene(mutant)``
