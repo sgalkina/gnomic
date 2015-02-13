@@ -46,7 +46,6 @@ integrated vector with mandatory integration site | ``site::(<feature, [...]>)``
 nucleotide range of a `feature` | ``feature[startBase_endBase]``
 coding nucleotide range of a `gene` | ``gene[c.startBase_endBase]``
 named `vector` containing `geneA` and `geneB` integrated at `site` | ``site::vector(geneA geneB)``
-DNA `sequence` | ``{sequence}``
 
 ### Proposed Excel- and File-safe extensions
 
