@@ -34,6 +34,40 @@ describe('Language parser', function() {
 
 
 
+    it('should handle different marker expressions', function() {
+        expect(parse('a>b::Marker+')).toEqual()
+        expect(parse('a>b::Marker(xyz)')).toEqual()
+
+        expect(parse('-abc::Marker+')).toEqual()
+        expect(parse('-abc::Marker(xyz)')).toEqual()
+
+        expect(parse('+abc::Marker+')).toEqual()
+        expect(parse('+abc::Marker(xyz)')).toEqual()
+
+        expect(parse('+(a b)::Marker+')).toEqual()
+        expect(parse('+a::(b c)::Marker+')).toEqual()
+        expect(parse('+a::p123(b c)::Marker+')).toEqual()
+
+        expect(parse('+(a b)::Marker(xyz)')).toEqual()
+        expect(parse('+a::(b c)::Marker(xyz)')).toEqual()
+        expect(parse('+a::p123(b c)::Marker(xyz)')).toEqual()
+
+        expect(parse('p123()::Marker+')).toEqual()
+        expect(parse('+p123()::Marker+')).toEqual()
+        expect(parse('-p123()::Marker+')).toEqual()
+
+        expect(parse('p123()::Marker(xyz)')).toEqual()
+        expect(parse('+p123()::Marker(xyz)')).toEqual()
+        expect(parse('-p123()::Marker(xyz)')).toEqual()
+
+        expect(parse('abc::Marker(xyz)')).to.fail() // or mean plasmid?
+        // NOTE site::p123(content) has the same format as gene::Marker(xyz)
+        // The best solution is probably to require the insertion format to be wrapped:
+        // (gene)::Marker(xyz)
+
+        expect(parse('a>b::Marker-')).to.fail();
+    });
+
 
     it('should handle insertion of episomes', function() {
         expect(parse('')).toEqual(
