@@ -1,7 +1,6 @@
-/**
- * Created by lyschoening on 5/20/15.
- */
+import parse from '../dist/genotype';
 
+console.log(parse.parse);
 
 describe('Language parser', function() {
 
@@ -22,9 +21,7 @@ describe('Language parser', function() {
     });
 
     it('should handle simple replacements', function() {
-        expect(parse('')).toEqual(
-
-        )
+        expect(parse('')).toEqual();
     });
 
     // TODO markers
@@ -32,13 +29,15 @@ describe('Language parser', function() {
 
     // TODO phenotypes...
 
+    // site>p123{abc, def, ghi, His}::His+
+    // p123{
 
 
     it('should handle different marker expressions', function() {
         expect(parse('a>b::Marker+')).toEqual()
         expect(parse('a>b::Marker(xyz)')).toEqual()
 
-        expect(parse('-abc::Marker+')).toEqual()
+        expect(parse('-abc::Marker+').equals()).toBe(true);
         expect(parse('-abc::Marker(xyz)')).toEqual()
 
         expect(parse('+abc::Marker+')).toEqual()
@@ -58,7 +57,7 @@ describe('Language parser', function() {
 
         expect(parse('p123()::Marker(xyz)')).toEqual()
         expect(parse('+p123()::Marker(xyz)')).toEqual()
-        expect(parse('-p123()::Marker(xyz)')).toEqual()
+        expect(parse('-p123{}::Marker(xyz)')).toEqual()
 
         expect(parse('abc::Marker(xyz)')).to.fail() // or mean plasmid?
         // NOTE site::p123(content) has the same format as gene::Marker(xyz)

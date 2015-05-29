@@ -250,7 +250,7 @@ class FeatureTree {
     /**
      * Enumerates all features of the feature tree.
      */
-    features() {
+    *features() {
         for(let item of this.contents) {
             if(item instanceof FeatureTree) {
                 yield* item.features();

@@ -1,4 +1,7 @@
+{
+    var Feature = require('./types.js').Feature;
 
+}
 
 start
 	= sep* list:designation_list sep* { return list }

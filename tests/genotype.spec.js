@@ -1,4 +1,4 @@
-
+import {Feature, Phene, Plasmid, Genotype, Insertion, Deletion, Replacement, Fusion, Group} from '../dist/types';
 
 describe('Genotypes', function() {
     it('should work with one generation.', function() {
