@@ -21,31 +21,31 @@ The language consists of **a *space-* or *comma-*separated list** of genotype or
 
 Designation                                 | Language expression
 ------------------------------------------- | -------------------------
-`gene` deleted                              | ``-gene``
-`gene` inserted                             | ``gene`` or ``+gene``
-`gene` of `organism`                        | ``organism/gene``
-`gene` with mutation designation            | ``gene(mutation-designation)``
-`gene` with accession number                | ``gene#GB:123456``
-`gene` from accession number                | ``#GB:123456``
+`feature` deleted                              | ``-feature``
+`feature` inserted                             | ``feature`` or ``+feature``
+`feature` of `organism`                        | ``organism/feature``
+`feature` with mutation designation            | ``feature(mutation-designation)``
+`feature` with accession number                | ``feature#GB:123456``
+`feature` from accession number                | ``#GB:123456``
 fusion of `feature1` and `feature2`         | ``feature1:feature2``
-`gene` with `promoter`                      | ``promoter:gene``
-`gene` with `promoter` & `terminator`       | ``promoter:gene:terminator``
-`gene` inserted at `site`                  | ``site::gene``
-`site` replaced with `gene`                | ``-site::gene``
-`site` substituted with `gene`             | ``site>gene`` (equivalent to replaced)
-`site` occuring multiple times substituted with `gene` | ``site>>gene``
-`gene` inserted at `site` using `Marker`   | ``site::gene::Marker+``
+`feature` with `promoter`                      | ``feature:gene``
+`feature` with `promoter` & `terminator`       | ``promoter:feature:terminator``
+`feature` inserted at `site`                  | ``site::feature``
+`site` substituted with `feature`             | ``site>feature``
+`site` occuring multiple times substituted with `feature` | ``site>>feature``
+`feature` inserted at `site` using `Marker`   | ``site::feature::Marker+``
 `Phenotype`: wild-type                      | ``Phene+`` or ``Phene(wild-type)``
 `Phenotype`: mutant                         | ``Phene-`` or ``Phene`` or ``Phene(mutant)``
 `Phenotype` or `Marker` of a certain source organism | `organism/Phene+` or `organism/Marker+`
 `selection marker` used                     | ``Marker+``
 `selection marker` available                | ``Marker-``
-a non-integrated episome | ``(<feature, [...]>)``
-episome with selection marker | ``(<feature, [...]>)::Marker+``
-integrated vector with mandatory integration site | ``site::(<feature, [...]>)``
+a non-integrated `episome` | ``episome{}`` or ``episome{<feature, [...]>}``
+episome with selection marker | ``episome{<feature, [...]>}::Marker+``
+integrated vector with mandatory integration site | ``site>episome{<feature, [...]>}`` or ``+site::episome{<feature, [...]>}`` (name is optional)
 nucleotide range of a `feature` | ``feature[startBase_endBase]``
 coding nucleotide range of a `gene` | ``gene[c.startBase_endBase]``
-named `vector` containing `geneA` and `geneB` integrated at `site` | ``site::vector(geneA geneB)``
+protein AA range of a `gene` | ``gene[p.startBase_endBase]``
+protein AA of a `gene` | ``gene[p.base]``
 
 ### Proposed Excel- and File-safe extensions
 
@@ -87,21 +87,21 @@ Term           | Description
 
 | Example code | Description                          |
 | ------------------------------------- | ------------------------------------- |
-| `X-1::(abcD defG)::M2, XII-2::hijK::M2, M3- ` | integrate vector containg `abcD` and `defG` at `X-1` using `M1` marker, insert `hijK` at `XII-2` using `M2` marker, state that `M3` marker is available (mutant) in strain
+| `X-1>{abcD defG}::M2+, XII-2>hijK::M2+, M3- ` | integrate vector containg `abcD` and `defG` at `X-1` using `M1` marker, insert `hijK` at `XII-2` using `M2` marker, state that `M3` marker is available (mutant) in strain
 | `#SGD:YOR202W` | insertion of yeast gene 'YOR202W' referenced in the [Saccharomyces Genome Database (SGD)](http://www.yeastgenome.org/)|
 | `-CAB5#SGD:YDR196C` | deletion of yeast gene 'YDR196C' with standard name 'GAB5' referenced in [SGD](http://www.yeastgenome.org/) ]|
 | `+E.coli/abcD::Leu2+` | insertion of _E.coli_ gene 'abcD' using 'Leu2' selection marker 
 | `-abcD` | deletion of feature 'abcD' in the parent strain |
 | `+abcD::His5+` | insertion of feature 'abcD' using the 'His5' selection marker |
-| `-efgH::abcD` | insertion of feature 'abcD' at the location of 'efgH', replacing (deleting) 'efgH' |
-| `efgH::abcD` | insertion of feature 'abcD' at the location of 'efgH' |
+| `efgH>abcD` | insertion of feature 'abcD' at the location of 'efgH', substituting (deleting) 'efgH' |
+| `+efgH::abcD` | insertion of feature 'abcD' at the location of 'efgH' |
 | `abcD(cr)` | insertion of gene 'abcD' with 'cr' (i.e. cold-resistant) mutation |
 | `Pmtr:abcD:Trmt` | insertion of the fusion of features 'Pmtr', 'abcD', 'Trmt' with implied types of 'promotor', 'gene' and 'terminator' |
 | `abcD:efgH:His5+` | insertion of genes 'abcD' and 'efgH' next to each other using the 'His5' selection marker |
 | `Abc+` | Abc wild-type phenotype |
 | `Abc-` | Abc mutant phenotype |
 | `-loxP:KanMX:loxP::loxP` | Replacement of `loxP:KanMX:loxP` with `loxP`| 
-| `X-1::p123(geneA, geneB)::KanMX+` | Integration of `p123` containing `geneA` and `geneB` at `X-1` using `KanMX` marker |
+| `X-1>p123{geneA geneB}::KanMX+` | Integration of `p123` containing `geneA` and `geneB` at `X-1` using `KanMX` marker |
  
 
 ## JSON format
