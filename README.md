@@ -44,8 +44,8 @@ episome with selection marker | ``episome{<feature, [...]>}::Marker+``
 integrated vector with mandatory integration site | ``site>episome{<feature, [...]>}`` or ``+site::episome{<feature, [...]>}`` (name is optional)
 nucleotide range of a `feature` | ``feature[startBase_endBase]``
 coding nucleotide range of a `gene` | ``gene[c.startBase_endBase]``
-protein AA range of a `gene` | ``gene[p.startBase_endBase]``
-protein AA of a `gene` | ``gene[p.base]``
+protein AA range of a `gene` | ``gene[p.startAA_endAA]``
+protein AA of a `gene` | ``gene[p.AA]``
 
 ### Proposed Excel- and File-safe extensions
 
