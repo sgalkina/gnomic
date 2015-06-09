@@ -1,4 +1,5 @@
-import {Feature, Phene, Plasmid, Genotype, Insertion, Deletion, Replacement, Fusion, Group} from '../dist/types';
+import {Feature, Phene, Plasmid, Genotype, Insertion, Deletion, Replacement, Fusion, Group} from '../src/types';
+import {expect} from 'chai';
 
 describe('Genotypes', function() {
     it('should work with one generation.', function() {
@@ -27,13 +28,13 @@ describe('Genotypes', function() {
                 marker2
             ),
             plasmid1,
-            plasmid2
+            plasmid2 // deprecated. should always be an insertion.
         );
 
-        expect(g.addedFeatures).toEqual([promoter1, gene1, gene4, gene5]); // TODO markers should be added too.
-        expect(g.removedFeatures).toEqual([gene2, gene3, site1]);
-        expect(g.addedEpisomes).toEqual([plasmid1]);
-        expect(g.sites).toEqual([site1, site2]);
-        expect(g.markers).toEqual([marker1, marker2, marker3]);
+        expect(g.addedFeatures).to.have.members([promoter1, gene1, gene4, gene5]); // TODO markers should be added too.
+        expect(g.removedFeatures).to.have.members([gene2, gene3, site1, site2]);
+        expect(g.addedEpisomes).to.have.members([plasmid1]);
+        expect(g.sites).to.have.members([site1, site2]);
+        expect(g.markers).to.have.members([marker1, marker2, marker3]);
     });
 });

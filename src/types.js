@@ -4,7 +4,7 @@
 
 
 // TODO ranges are not currently supported because they make the logic of computing a genotype radically more difficult
-class Genotype {
+export class Genotype {
     /**
      *
      * Only one variant of a gene is considered realistic, so an insertion of a gene with a variant replaces the
@@ -52,12 +52,16 @@ class Genotype {
         }
 
         for(let change of changes) {
+
+            console.log('change:', change)
             if(change instanceof Plasmid) {
                 let plasmid = change;
                 if(plasmid.isEpisome()) {
                     episomes.removed = remove(episomes.removed, plasmid);
                     episomes.added = upsert(episomes.added, plasmid);
+                    continue;
                 } else {
+                    console.error('deprecated!', plasmid);
                     change = plasmid.toInsertion();
                 }
             }
@@ -181,7 +185,7 @@ class Genotype {
     }
 }
 
-class Deletion {
+export class Deletion {
 
     /**
      *
@@ -204,7 +208,7 @@ class Deletion {
     }
 }
 
-class Insertion {
+export class Insertion {
     // TODO change site from a string to a feature, allow ranges.
     /**
      *
@@ -214,31 +218,39 @@ class Insertion {
     constructor(insertion, marker = null) {
         if(insertion instanceof Feature) {
             insertion = new FeatureTree(insertion);
+        } else if(insertion instanceof Plasmid) {
+            insertion.marker |= marker;
         }
+
         this.contents = insertion;
         this.marker = marker;
     }
 }
 
 
-class Replacement {
+export class Replacement {
     /**
      * @param {(Feature|Phene)} site integration site
      * @param {(Feature|FeatureTree)} insertion
      * @param {(Feature|Phene)} marker
      */
-    constructor(site, insertion, marker = null) {
+    constructor(site, insertion, marker = null, multiple=false) {
         if(insertion instanceof Feature) {
             insertion = new FeatureTree(insertion);
+        } else if(insertion instanceof Plasmid) {
+            insertion.marker |= marker;
+            insertion.site |= site;
         }
+
         this.contents = insertion;
         this.site = site;
         this.marker = marker;
+        this.multiple = multiple;
     }
 }
 
 
-class FeatureTree {
+export class FeatureTree {
     /**
      *
      * @param {...(Phene|Feature|FeatureTree)} contents
@@ -261,13 +273,13 @@ class FeatureTree {
     }
 }
 
-class Group extends FeatureTree {
+export class Group extends FeatureTree {
     /**
      *
      * @param {...(Feature|Fusion)} contents
      */
     constructor(...contents) {
-        super(contents);
+        super(...contents);
     }
 
     // TODO compare all features from both groups.
@@ -276,17 +288,17 @@ class Group extends FeatureTree {
     }
 }
 
-class Plasmid extends Group {
+export class Plasmid extends FeatureTree {
 
     /**
      *
      * @param {(string|null)} name
-     * @param {(string|null)} site integration site
-     * @param {(string|null)} marker selection marker
+     * @param {(string|null)} site integration site (must be within insertion, carried over from insertion).
+     * @param {(string|null)} marker selection marker (carried over from insertion).
      * @param {...(Phene|Feature|Fusion)} contents
      */
     constructor(name, site=null, marker=null, ...contents) {
-        super(contents);
+        super(...contents);
         this.name = name;
         this.site = site;
         this.marker = marker;
@@ -298,7 +310,7 @@ class Plasmid extends Group {
 
     toInsertion() {
         if(this.isIntegrated()) {
-            return new Replacement(this.site, this.contents, this.marker);
+            return new Replacement(this.site, this, this.marker);
         } else {
             throw `Plasmid(${this.name}) can't be converted to an insertion because it is not integrated.`;
         }
@@ -325,19 +337,19 @@ class Plasmid extends Group {
     }
 }
 
-class Fusion extends FeatureTree {
+export class Fusion extends FeatureTree {
 
     /**
      *
      * @param {...Feature} features
      */
     constructor(...features) {
-        super(features);
+        super(...features);
     }
 }
 
 
-class Feature {
+export class Feature {
     /**
      *
      * @param {(string|null)} name
@@ -403,7 +415,7 @@ class Feature {
     }
 }
 
-class Phene extends  Feature {
+export class Phene extends Feature {
     /**
      *
      * @param name
@@ -420,7 +432,7 @@ class Phene extends  Feature {
  */
 
 // TODO make zero-indexed and disallow points
-class Range {
+export class Range {
     /**
      *
      * @param {int} start
@@ -446,7 +458,7 @@ class Range {
     }
 }
 
-class Accession {
+export class Accession {
     constructor(identifier, database=null) {
         this.identifier = identifier;
         this.database = database;
@@ -463,7 +475,7 @@ class Accession {
     }
 }
 
-class Organism {
+export class Organism {
     constructor(name, aliases=[]) {
         this.name = name;
         this.aliases = aliases;

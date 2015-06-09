@@ -4,14 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --compilers js:mocha-babel test/*.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "babel": "^5.5.5",
+    "babel-runtime": "^5.5.5",
+    "chai": "^3.0.0",
     "gulp": "^3.8.11",
     "gulp-babel": "^5.1.0",
     "gulp-peg": "^0.1.2",
+    "gulp-replace": "^0.5.3",
     "gulp-util": "^3.0.4",
     "jasmine-core": "^2.3.4",
     "karma": "^0.12.33",
@@ -20,6 +24,8 @@
     "karma-jasmine": "^0.3.5",
     "karma-jspm": "^1.1.5",
     "karma-requirejs": "^0.2.2",
+    "mocha": "^2.2.5",
+    "mocha-babel": "^3.0.0",
     "pegjs": "^0.8.0",
     "requirejs": "^2.1.17"
   },
