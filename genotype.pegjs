@@ -64,7 +64,7 @@ feature_set
     / "{" f:(fusion/feature) "}" { return [f] }
 
 fusion
-    = start:(f:feature ":" { return f })+ last:feature { return new types.Fusion(...start.concat(last)) }
+    = start:feature rest:(":" f:feature { return f })+ { return new types.Fusion(...[start].concat(rest)) }
 
 variant
     = "(" v:identifier ")" { return v }
