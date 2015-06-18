@@ -1,4 +1,4 @@
-import {parse} from '../src/genotype';
+import {parse, SyntaxError} from '../src/genotype';
 import {Feature, Accession, Phene, Plasmid, Fusion, Group, Organism, Replacement, Insertion, Deletion} from '../src/types';
 import {expect} from 'chai';
 
@@ -86,6 +86,14 @@ describe('Language parser', function() {
     it('should handle fusions', function() {
         expect(parse('+a:b')).to.deep.equal([
             new Insertion(new Fusion(new Feature('a'), new Feature('b')))
+        ]);
+
+        expect(parse('+a:b::m+')).to.deep.equal([
+            new Insertion(new Fusion(new Feature('a'), new Feature('b')), new Phene('m'))
+        ]); // +{a:b}::m+ is equivalent.
+
+        expect(parse('+{a:b}::m+')).to.deep.equal([
+            new Insertion(new Group(new Fusion(new Feature('a'), new Feature('b'))), new Phene('m'))
         ]);
 
         expect(parse('-abc:def')).to.deep.equal([
@@ -177,8 +185,15 @@ describe('Language parser', function() {
     });
 
     it('should not allow insertion with site', function() {
-        expect(parse('+a::b::c+')).to.fail();
-        // use +a:b::c+ or +{a b}::c+
+        expect(() => parse('+a::b::c+')).to.throw(SyntaxError);
+        // instead use +a:b::c+ or +{a b}::c+
+        expect(() => parse('+a:b::c+')).to.not.throw(SyntaxError);
+        expect(() => parse('+{a b}::c+')).to.not.throw(SyntaxError);
+    });
+
+    it('should not allow nested feature groups/plasmids', function() {
+        expect(() => parse('+{a b {c d}}')).to.throw(SyntaxError);
+        expect(() => parse('+p1{a p2{} c}')).to.throw(SyntaxError);
     });
 
     it('should distinguish between episomes and plasmids', function() {
@@ -191,7 +206,7 @@ describe('Language parser', function() {
 
     it('should handle multiple things', function() {
         expect(parse('-a +b c>>d p{}')).to.deep.equal([
-            new Deletion(new Feature('a')),
+        new Deletion(new Feature('a')),
             new Insertion(new Feature('b')),
             new Replacement(new Feature('c'), new Feature('d'), null, true),
             new Plasmid('p')

@@ -15,8 +15,8 @@ describe('Genotypes', function() {
         var site2 = new Feature('site2');
         var marker3 = new Phene('marker3');
         var gene5 = new Feature('gene5');
-        var plasmid2 = new Plasmid('plasmid2', site2, marker3, gene5);
-        var g = new Genotype(null,
+        var plasmid2 = new Plasmid('plasmid2', null, marker3, gene5);
+        var g = new Genotype(null, [
             new Insertion(new Fusion(promoter1, gene1)),
             new Deletion(new Group(
                 gene2,
@@ -28,13 +28,32 @@ describe('Genotypes', function() {
                 marker2
             ),
             plasmid1,
-            plasmid2 // deprecated. should always be an insertion.
-        );
+            new Replacement(site2, plasmid2)
+        ]);
 
-        expect(g.addedFeatures).to.have.members([promoter1, gene1, gene4, gene5]); // TODO markers should be added too.
+        expect(g.addedFeatures).to.have.members([marker1, marker2, marker3, promoter1, gene1, gene4, gene5]); // TODO markers should be added too.
         expect(g.removedFeatures).to.have.members([gene2, gene3, site1, site2]);
         expect(g.addedEpisomes).to.have.members([plasmid1]);
         expect(g.sites).to.have.members([site1, site2]);
         expect(g.markers).to.have.members([marker1, marker2, marker3]);
     });
+
+
+    it('should work with multiple generations.', function() {
+        var g1 = new Genotype(null, [
+            new Insertion(new Group(new Feature('gene1'), new Feature('gene2')))
+        ]);
+
+        expect(g1.addedFeatures).to.deep.have.members([new Feature('gene1'), new Feature('gene2')]);
+        expect(Array.from(g1.features())).to.deep.have.members([new Feature('gene1'), new Feature('gene2')]);
+
+        var g2 = new Genotype(g1, [
+            new Deletion(new Feature('gene1'))
+        ]);
+
+        expect(g2.removedFeatures).to.deep.have.members([new Feature('gene1')]);
+
+        expect(g2.addedFeatures).to.be.empty;
+        expect(Array.from(g2.features(true))).to.deep.have.members([new Feature('gene1')]);
+    })
 });

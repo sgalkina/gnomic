@@ -87,7 +87,7 @@ export const {SyntaxError, parse} = (function() {
         peg$c40 = function(f) { return [f] },
         peg$c41 = ":",
         peg$c42 = { type: "literal", value: ":", description: "\":\"" },
-        peg$c43 = function(start, last) { return new types.Fusion(...start.concat(last)) },
+        peg$c43 = function(start, rest) { return new types.Fusion(...[start].concat(rest)) },
         peg$c44 = "(",
         peg$c45 = { type: "literal", value: "(", description: "\"(\"" },
         peg$c46 = ")",
@@ -996,13 +996,13 @@ export const {SyntaxError, parse} = (function() {
     }
 
     function peg$parsefusion() {
-      var s0, s1, s2, s3, s4;
+      var s0, s1, s2, s3, s4, s5;
 
       s0 = peg$currPos;
-      s1 = [];
-      s2 = peg$currPos;
-      s3 = peg$parsefeature();
-      if (s3 !== peg$FAILED) {
+      s1 = peg$parsefeature();
+      if (s1 !== peg$FAILED) {
+        s2 = [];
+        s3 = peg$currPos;
         if (input.charCodeAt(peg$currPos) === 58) {
           s4 = peg$c41;
           peg$currPos++;
@@ -1011,23 +1011,23 @@ export const {SyntaxError, parse} = (function() {
           if (peg$silentFails === 0) { peg$fail(peg$c42); }
         }
         if (s4 !== peg$FAILED) {
-          peg$reportedPos = s2;
-          s3 = peg$c37(s3);
-          s2 = s3;
+          s5 = peg$parsefeature();
+          if (s5 !== peg$FAILED) {
+            peg$reportedPos = s3;
+            s4 = peg$c37(s5);
+            s3 = s4;
+          } else {
+            peg$currPos = s3;
+            s3 = peg$c0;
+          }
         } else {
-          peg$currPos = s2;
-          s2 = peg$c0;
+          peg$currPos = s3;
+          s3 = peg$c0;
         }
-      } else {
-        peg$currPos = s2;
-        s2 = peg$c0;
-      }
-      if (s2 !== peg$FAILED) {
-        while (s2 !== peg$FAILED) {
-          s1.push(s2);
-          s2 = peg$currPos;
-          s3 = peg$parsefeature();
-          if (s3 !== peg$FAILED) {
+        if (s3 !== peg$FAILED) {
+          while (s3 !== peg$FAILED) {
+            s2.push(s3);
+            s3 = peg$currPos;
             if (input.charCodeAt(peg$currPos) === 58) {
               s4 = peg$c41;
               peg$currPos++;
@@ -1036,23 +1036,23 @@ export const {SyntaxError, parse} = (function() {
               if (peg$silentFails === 0) { peg$fail(peg$c42); }
             }
             if (s4 !== peg$FAILED) {
-              peg$reportedPos = s2;
-              s3 = peg$c37(s3);
-              s2 = s3;
+              s5 = peg$parsefeature();
+              if (s5 !== peg$FAILED) {
+                peg$reportedPos = s3;
+                s4 = peg$c37(s5);
+                s3 = s4;
+              } else {
+                peg$currPos = s3;
+                s3 = peg$c0;
+              }
             } else {
-              peg$currPos = s2;
-              s2 = peg$c0;
+              peg$currPos = s3;
+              s3 = peg$c0;
             }
-          } else {
-            peg$currPos = s2;
-            s2 = peg$c0;
           }
+        } else {
+          s2 = peg$c0;
         }
-      } else {
-        s1 = peg$c0;
-      }
-      if (s1 !== peg$FAILED) {
-        s2 = peg$parsefeature();
         if (s2 !== peg$FAILED) {
           peg$reportedPos = s0;
           s1 = peg$c43(s1, s2);

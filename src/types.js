@@ -14,7 +14,7 @@ export class Genotype {
      * @param ancestor
      * @param {...(Insertion|Replacement|Deletion|Plasmid)} changes
      */
-    constructor(ancestor=null, ...changes) {
+    constructor(ancestor=null, changes) {
         this.ancestor = ancestor;
         this.changes = changes;
 
@@ -26,22 +26,14 @@ export class Genotype {
         // features based on the range or describing the mutation in the variant string.
 
         // TODO enumerate all features from the changes.
-        var sites = this.ancestor ? this.ancestor.sites : []; // any features used like sites
-        var markers = this.ancestor ? this.ancestor.markers :  []; // any features/phenes used like markers
-
+        var sites = this.ancestor ? Array.from(this.ancestor.sites) : []; // any features used like sites
+        var markers = this.ancestor ? Array.from(this.ancestor.markers) :  []; // any features/phenes used like markers
 
         // TODO also remove markers from features
         // TODO combine features and phenes somehow
 
-        var features = {
-            added: this.ancestor ? this.ancestor.addedFeatures : [],
-            removed: this.ancestor ? this.ancestor.removedFeatures : []
-        };
-
-        var episomes = {
-            added: this.ancestor ? this.ancestor.addedEpisomes : [],
-            removed: this.ancestor ? this.ancestor.removedEpisomes : []
-        };
+        var features = {added: [], removed: []};
+        var episomes = {added: [],removed: []};
 
         function remove(array, value) {
             return array.filter((element) => !value.equals(element));
@@ -52,8 +44,6 @@ export class Genotype {
         }
 
         for(let change of changes) {
-
-            console.log('change:', change)
             if(change instanceof Plasmid) {
                 let plasmid = change;
                 if(plasmid.isEpisome()) {
@@ -61,16 +51,12 @@ export class Genotype {
                     episomes.added = upsert(episomes.added, plasmid);
                     continue;
                 } else {
-                    console.error('deprecated!', plasmid);
+                    console.warn('Deprecated: Insertion of a plasmid with insertion site as episome.');
                     change = plasmid.toInsertion();
                 }
             }
 
             if(change instanceof Insertion) {
-                if(change.marker) {
-                    markers = upsert(markers, change.marker);
-                }
-
                 for(let feature of change.contents.features()) {
                     features.removed = remove(features.removed, feature);
                     features.added = upsert(features.added, feature);
@@ -84,64 +70,44 @@ export class Genotype {
                 features.added = remove(features.added, change.site);
                 features.removed = upsert(features.removed, change.site);
 
-                if(change.marker) {
-                    markers = upsert(markers, change.marker);
-                }
-
                 for(let feature of change.contents.features()) {
                     features.removed = remove(features.removed, feature);
                     features.added = upsert(features.added, feature);
                 }
             } else { // change instanceof Deletion
-
-                // TODO FIXME handle deletion of Plasmids!
-
-                for(let feature of change.contents.features()) {
-                    features.added = remove(features.added, feature);
-                    features.removed = upsert(features.removed, feature);
+                if(change.contents instanceof Plasmid) {
+                    let plasmid = change;
+                    episomes.added = remove(episomes.added, plasmid);
+                    episomes.removed = upsert(episomes.removed, plasmid);
+                } else {
+                    for(let feature of change.contents.features()) {
+                        features.added = remove(features.added, feature);
+                        features.removed = upsert(features.removed, feature);
+                    }
                 }
-
-                if(change.marker) {
-                    markers = upsert(markers, change.marker);
-                }
-
-                // FIXME the language currently makes it difficult to do a deletion with a marker
-                // e.g.  -abc::Marker(R) is fine enough because abc is seen as a site,
-                //       But what if instead we use #X:123?
-                //       -#X:123 still works, but -#X:123::Marker(R) does not -- only -#X:123::Marker+ does
-                //        -- because now the marker is considered plain text
-                // The language should be changed so that sites are features and markers are phenes
-                // A replacement with two components should always be before>after
-                // e.g. #abc:123>Marker(R)
-                // Now, before>after::Marker is possible, but then both after and Marker are inserted
-                // -before::after is equivalent to before>after, which also means that
-                // -before::Marker+ is equivalent to -before>Marker+
-                // There is a difficulty here in determining if after is a marker or a gene.
-                // 1. it is always a gene if no variant indicator is present (and it cannot be '-')
-                // 2. it is either a gene or a phene if a variant indicator is present.
-                // 2.1. If the first character is uppercase, that suggests phene, but it is not a strong suggestion.
-                // 3. Ultimately it shouldn't matter much. The search should maybe start in phenes and then continue to features.
             }
 
-            // TODO freeze with Object.freeze()
-            this._features = features;
-            this._episomes = episomes;
-            this._sites = sites;
-            this._markers = markers;
+            // Any marker is added (variant applied) at the very end
+            if(change.marker) {
+                markers = upsert(markers, change.marker);
+
+                features.removed = remove(features.removed, change.marker);
+                features.added = upsert(features.added, change.marker);
+            }
         }
+
+        // TODO freeze with Object.freeze()
+        this.addedFeatures = Object.freeze(features.added);
+        this.removedFeatures = Object.freeze(features.removed);
+        this.addedEpisomes = Object.freeze(episomes.added);
+        this.removedEpisomes = Object.freeze(episomes.removed);
+        this.sites = Object.freeze(sites);
+        this.markers = Object.freeze(markers);
     }
 
     //toString() {
     //
     //}
-
-    get sites() {
-        return this._sites;
-    }
-
-    get markers() {
-        return this._markers;
-    }
 
     /**
      * A list of all episomes in the genotype
@@ -159,29 +125,16 @@ export class Genotype {
      * A list of insertions and deletions on a gene level. On
      * @param inclusive
      */
-    features(inclusive=true) {
-        if(inclusive || !this.ancestor) {
-            return this.addedFeatures;
-        } else {
-            return this.addedFeatures
-                .filter((feature) => !this.ancestor.addedFeatures.some((f) => feature.equals(f)));
+    *features(inclusive=true) {
+        yield *this.addedFeatures;
+
+        if(inclusive && this.ancestor) {
+            for(let feature of this.ancestor.features()) {
+                if(this.removedFeatures.some((f) => feature.equals(f))) {
+                    yield feature;
+                }
+            }
         }
-    }
-
-    get addedFeatures() {
-        return this._features.added;
-    }
-
-    get removedFeatures() {
-        return this._features.removed;
-    }
-
-    get addedEpisomes() {
-        return this._episomes.added;
-    }
-
-    get removedEpisomes() {
-        return this._episomes.removed;
     }
 }
 
@@ -219,6 +172,7 @@ export class Insertion {
         if(insertion instanceof Feature) {
             insertion = new FeatureTree(insertion);
         } else if(insertion instanceof Plasmid) {
+            marker = marker || insertion.marker;
             insertion.marker |= marker;
         }
 
@@ -233,11 +187,14 @@ export class Replacement {
      * @param {(Feature|Phene)} site integration site
      * @param {(Feature|FeatureTree)} insertion
      * @param {(Feature|Phene)} marker
+     * @param {bool} multiple whether the site is for multiple integration
      */
-    constructor(site, insertion, marker = null, multiple=false) {
+    constructor(site, insertion, marker = null, multiple = false) {
         if(insertion instanceof Feature) {
             insertion = new FeatureTree(insertion);
         } else if(insertion instanceof Plasmid) {
+            marker = marker || insertion.marker;
+            site = site || insertion.site;
             insertion.marker |= marker;
             insertion.site |= site;
         }
@@ -293,7 +250,6 @@ export class Plasmid extends FeatureTree {
     /**
      *
      * @param {(string|null)} name
-     * @param {(string|null)} site integration site (must be within insertion, carried over from insertion).
      * @param {(string|null)} marker selection marker (carried over from insertion).
      * @param {...(Phene|Feature|Fusion)} contents
      */
