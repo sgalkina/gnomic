@@ -1,4 +1,4 @@
-# Gnomic
+# GNOMIC
 
 GNOMIC is a software package and formal grammar for describing genotypes and phenotypes of microbial strains.
 
@@ -77,7 +77,7 @@ Term           | Description
 
 | Example code | Description                          |
 | ------------------------------------- | ------------------------------------- |
-| `X-1>{abcD defG}::M2+, XII-2>hijK::M2+, M3- ` | integrate vector containg `abcD` and `defG` at `X-1` using `M1` marker, insert `hijK` at `XII-2` using `M2` marker, state that `M3` marker is available (mutant) in strain
+| `X1>{abcD defG}::M2+, XII2>hijK::M2+, M3- ` | integrate vector containg `abcD` and `defG` at `X1` using `M1` marker, insert `hijK` at `XII2` using `M2` marker, state that `M3` marker is available (mutant) in strain
 | `#SGD:YOR202W` | insertion of yeast gene 'YOR202W' referenced in the [Saccharomyces Genome Database (SGD)](http://www.yeastgenome.org/)|
 | `-CAB5#SGD:YDR196C` | deletion of yeast gene 'YDR196C' with standard name 'GAB5' referenced in [SGD](http://www.yeastgenome.org/) ]|
 | `+E.coli/abcD::Leu2+` | insertion of _E.coli_ gene 'abcD' using 'Leu2' selection marker
@@ -91,7 +91,7 @@ Term           | Description
 | `Abc+` | Abc wild-type phenotype |
 | `Abc-` | Abc mutant phenotype |
 | `-loxP:KanMX:loxP::loxP` | Replacement of `loxP:KanMX:loxP` with `loxP`|
-| `X-1>p123{geneA geneB}::KanMX+` | Integration of `p123` containing `geneA` and `geneB` at `X-1` using `KanMX` marker |
+| `X1>p123{geneA geneB}::KanMX+` | Integration of `p123` containing `geneA` and `geneB` at `X1` using `KanMX` marker |
 
 ## JSON-representation
 
