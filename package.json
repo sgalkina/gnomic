@@ -8,6 +8,10 @@
   },
   "author": "Lars Schöning <lars@lyschoening.de>",
   "license": "MIT",
+  "repository" : {
+    "type" : "git"
+  , "url" : "https://github.com/biosustain/gnomic.git"
+  },
   "devDependencies": {
     "babel": "^5.5.8",
     "babel-runtime": "^5.5.8",
