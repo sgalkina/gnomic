@@ -1,13 +1,12 @@
 # Gnomic
 
-*Gnomic* is a formal grammar and software package for describing genotypes and phenotypes of microbial strains.
-
-The gnomic grammar is designed to provide a clear, unambiguous, human and machine readable, genotype definition
-notation with flexibility in the level of detail of the definition.
+Gnomic is a grammar for describing genotypes and phenotypes of microbial strains. The gnomic grammar is designed to provide a clear, unambiguous, human and machine readable, genotype definition notation with flexibility in the level of detail of the definition. Gnomic comes with NodeJS package for parsing and analysis, written in ECMAScript 2015. 
 
 ## Installation
 
-At this point, an NPM package for Gnomic is available. (A PyPi package is planned).
+Install the `gnomic-grammar` package via NPM:
+
+    npm install gnomic-grammar
 
 ## Usage
 
@@ -84,11 +83,11 @@ TODO
 
 ## Contributions
 
-Contributions are very welcome. Please create an issue or contact the author (Lars Schöning) if you would like to propose any significant/breaking changes.
+Contributions are very welcome. Please create an issue or contact the author (Lars Schöning) if you would like to propose any significant/breaking changes. Let us know if you want to help us out with a Python version of the grammar.
 
 ## References
 
-- [Wikipedia -- Bacterial genetic nomenclature](http://en.wikipedia.org/wiki/Bacterial_genetic_nomenclature)
-- [Journal of Bacteriology -- Instructions to Authors](http://jb.asm.org/site/misc/journal-ita_nom.xhtml#03)
-- [Human Genome Variation Society -- Recommendations for the description of sequence variants](http://www.hgvs.org/mutnomen/recs.html)
+- [Wikipedia — Bacterial genetic nomenclature](http://en.wikipedia.org/wiki/Bacterial_genetic_nomenclature)
+- [Journal of Bacteriology — Instructions to Authors](http://jb.asm.org/site/misc/journal-ita_nom.xhtml#03)
+- [Human Genome Variation Society — Recommendations for the description of sequence variants](http://www.hgvs.org/mutnomen/recs.html)
 - [Databases cross-referenced in UniProtKB](http://www.uniprot.org/docs/dbxref)
