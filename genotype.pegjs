@@ -1,91 +1,87 @@
+
 start
-	= sep* list:designation_list sep* { return list }
+    = sep* changes:change_list sep* { return changes }
 
-designation_list
-	= start:(d:designation list_separator { return d })* last:designation { return start.concat(last) }
-        / d:designation { return [d] }
+change_list
+    = start:(c:change list_separator { return c })* last:change { return start.concat(last) }
+    / c:change { return [c] }
 
-designation
-	= phenotype
-        / marker_presence
-        / genotype
+change
+    = insertion
+    / replacement
+    / deletion
+    / plasmid 
+    / phene
 
-list_separator
-    = sep* "," sep*
-    / sep+
+insertion
+    = "+" i:insertable m:marker? { return new types.Insertion(i, m) }
 
-marker_presence
-    = "+"? marker:identifier "*" { return { marker: { name: marker, used: true } } }
-    / "-" marker:identifier "*" { return { marker: { name: marker, used: false } } } 
+replacement
+    = s:feature ">" i:insertable m:marker? { return new types.Replacement(s, i, m) }
+    / s:feature ">>" i:insertable m:marker? { return new types.Replacement(s, i, m, true) }
 
-phenotype
-	= p:phene "+" { return { phenotype: { name: p, mutation: 'wild-type' } } }
-	/ p:phene "-" { return { phenotype: { name: p, mutation: 'mutant' } } }
-	/ p:phene m:mutation { return { phenotype: { name: p, mutation: m } } }
-
-genotype
-    = g:genotype_without_locus "::" marker:identifier "*" { g.marker = marker; return g }
-    / g:genotype_with_locus "::" marker:identifier "*" { g.marker = marker; return g }
-    / genotype_with_locus
-    / genotype_without_locus
-    
-genotype_with_locus
-	= "-" locus:identifier "::" i:insertable { return { type: 'insertion', replacingLocus: locus, with: i } } 
-	/ locus:identifier "::" i:insertable { return { type: 'insertion', atLocus: locus, of: i } } 
-	
-genotype_without_locus
-	= "-" g:gene_feature { return { type: 'deletion', of: g } }
-	/ "+" i:insertable { return { type: 'insertion', of: i } }
-	/ g:gene_feature "^^" { return { type: 'upRegulation', of: g, multiple: true } }
-	/ g:gene_feature "^" { return { type: 'upRegulation', of: g, } }
-	/ g:gene_feature "<" { return { type: 'downRegulation', of: g, } }
-	/ i:insertable { return { type: 'insertion', of: i } }
+deletion
+    = "-" d:insertable m:marker? { return new types.Deletion(d, m) }
 
 insertable
-    = fusion
+    = plasmid
+    / fs:feature_set { return new types.Group(...fs) }
+    / fusion
     / feature
-    
-fusion
-	= start:(f:feature ":" { return f })+ last:feature { return { fusion: start.concat(last) } }
 
-feature
-	= n:$("P" identifier) { return { feature: { name: n, typeHint: 'promoter' } }}
-	/ n:$("T" identifier) { return { feature: { name: n, typeHint: 'terminator' } }}
-	/ gene_feature
+plasmid
+    = name:identifier fs:feature_set { return new types.Plasmid(name, null, null, ...fs) }
+    / name:identifier "{}" { return new types.Plasmid(name) }
 
-gene_feature
-        = o:organism "/" g:gene_feature_pt2 { g.feature.organism = o; return g }
-        / gene_feature_pt2
-
-gene_feature_pt2
-   	= "#" a:accession { return { feature: { accession: a } } }
-	/ n:gene m:mutation "#" a:accession { return { feature: { name: n, mutation: m, accession: a, type: 'gene' } } }
-	/ n:gene "#" a:accession { return { feature: { name: n, accession: a, type: 'gene' } } }
-	/ n:gene m:mutation { return { feature: { name: n, mutation: m, type: 'gene' } } }
-	/ n:gene { return { feature: { name: n, weakType: 'gene' } } }
-
-gene
-    = $([a-zA-Z0-9]+)
+marker = "::" m:phene { return m }
 
 phene
-    = $([A-Z][a-zA-Z0-9]+)
+    = o:feature_organism? name:identifier a:accession v:binary_variant {
+        return new types.Phene(name, {accession: a, variant: v, organism: o})
+    }
+    / a:accession v:binary_variant {
+        return new types.Phene(null, {accession: a, variant: v})
+    }
+    / o:feature_organism? name:identifier v:variant {
+        return new types.Phene(name, {variant: v, organism: o})
+    }
 
-organism
-    = $([a-zA-Z0-9]+("."[a-zA-Z0-9]+)?)
+/* todo variant */
 
+feature
+    = o:feature_organism? name:identifier v:variant? a:accession? r:range? { return new types.Feature(name, {
+                                                                       organism: o,
+                                                                       accession: a,
+                                                                       variant: v,
+                                                                       range: r}) }
+    / a:accession r:range? { return new types.Feature(null, {accession: a, range: r}) }
 
-mutation
-    = "(" mutation:identifier ")" { return mutation }
+feature_organism
+    = o:organism "/" { return new types.Organism(o) }
 
-/**
- * Accession number in DBXREF format.
- * 
- * http://www.uniprot.org/docs/dbxref
- */
+feature_set
+    = "{" start:(f:(fusion/feature) list_separator { return f })* last:(fusion/feature) "}" { return start.concat(last) }
+    / "{" f:(fusion/feature) "}" { return [f] }
+
+fusion
+    = start:feature rest:(":" f:feature { return f })+ { return new types.Fusion(...[start].concat(rest)) }
+
+variant
+    = "(" v:identifier ")" { return v }
+    / v:binary_variant { return v }
+
+binary_variant
+    = "+" { return 'wild-type' }
+    / "-" { return 'mutant' }
+
+range = "[" type:range_sequence_type? start:integer "_" end:integer "]" { return {type: type || 'coding', start: start, end: end} }
+      / "[" type:range_sequence_type? pos:integer "]" { return {type: type || 'coding', start: pos, end: pos} }
+
+range_sequence_type = (type:$([cp]) ".") { return {c: 'coding', p: 'protein'}[type] }
+
 accession
-    = name:database ":" id:integer { return { name: name, value: id }; }
-    / name:database ":" id:identifier { return { name: name, value: id }; }
-
+    = "#" db:database ":" id:(integer/identifier) { return new types.Accession(id, db); }
+    / "#" id:(integer/identifier) { return new types.Accession(id); }
 
 database
     = $([A-Za-z0-9-][A-Za-z0-9]+)
@@ -96,5 +92,12 @@ integer "integer"
 identifier
     = $([A-Za-z0-9]+([A-Za-z0-9_-]+[A-Za-z0-9])?)
 
+organism
+    = $([a-zA-Z0-9]+("."[a-zA-Z0-9]+)?)
+
+list_separator
+    = sep* "," sep*
+    / sep+
+
 sep
-	= [ \t\r\n]
+    = [ \t\r\n]
