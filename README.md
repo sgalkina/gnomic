@@ -33,7 +33,7 @@ phenotype: wild-type                      | ``phene+`` or ``phene(wild-type)``
 phenotype: mutant                         | ``phene-`` or ``phene`` or ``phene(mutant)``
 selection marker: used (wild-type)         | ``marker+``
 selection marker: available (missing/mutant) | ``marker-``
-a non-integrated episome | ``episome{}` or ``episome{feature, [...]}``
+a non-integrated episome | ``episome{}`` or ``episome{feature, [...]}``
 episome with selection marker | ``episome{feature, [...]}::marker+``
 integrated vector with mandatory integration site | ``+site::vector{feature, [...]}``
 nucleotide range of a `feature` | ``feature[startBase_endBase]``
