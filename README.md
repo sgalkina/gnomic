@@ -1,10 +1,13 @@
-# GNOMIC
+# Gnomic
 
-GNOMIC is a software package and formal grammar for describing genotypes and phenotypes of microbial strains.
+*Gnomic* is a formal grammar and software package for describing genotypes and phenotypes of microbial strains.
 
 The gnomic grammar is designed to provide a clear, unambiguous, human and machine readable, genotype definition
 notation with flexibility in the level of detail of the definition.
 
+## Installation
+
+At this point, an NPM package for Gnomic is available. (A PyPi package is planned).
 
 ## Usage
 
@@ -12,7 +15,7 @@ TODO
 
 ## Grammar definition
 
-The grammar consists of **a *space-* or *comma-*separated list** of genotype or phenotype designations described using the following nomenclature:
+The grammar consists of a *space-* or *comma-*separated list** of genotype or phenotype designations described using the following nomenclature:
 
 Designation                                 | Grammar expression
 ------------------------------------------- | -------------------------
