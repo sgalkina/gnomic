@@ -39,7 +39,7 @@ integrated vector with mandatory integration site | ``+site::vector{feature, [..
 nucleotide range of a `feature` | ``feature[startBase_endBase]``
 coding nucleotide range of a `gene` | ``gene[c.startBase_endBase]``
 protein amino-acid range of a `gene` | ``gene[p.startAA_endAA]``
-protein amino-acid of a `gene` | ``gene[p.base]``		+protein AA of a `gene` | ``gene[p.AA]``
+protein amino-acid of a `gene` | ``gene[p.AA]``
 
 ### Term definitions
 
