@@ -56,16 +56,6 @@ Designation                                 | Grammar expression
 ------------------------------------------- | -------------------------
 feature name containing spaces or underscores | e.g. `"some feature name"` or `'some feature name'`
 
-### Ambiguity
-
-This grammar definition alone does not avoid all ambiguity in the specification. The following assumptions and
-guidelines apply:
-
-- Phenotypes must always end with `+` or `-` or a custom type designation. The grammar makes no distinction between a specific
-  variant of a gene, and a phenotype.
-- Accessions must be database cross references in the format ``DATABASE:ID`` or ``ID``, where the ID then must belong to the own organization.
-- A standard for identifying promoters, terminators and other features should be employed on an organizational level; possibly through a consistent prefix. e.g. `p.xyz` for promoters, ``t.xyz`` for terminators.
-
 ### Grammar terms
 
 Term           | Description
