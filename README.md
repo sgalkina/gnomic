@@ -68,7 +68,6 @@ Term           | Description
 | `abcD:efgH:His5+` | insertion of genes 'abcD' and 'efgH' next to each other using the 'His5' selection marker |
 | `Abc+` | Abc wild-type phenotype |
 | `Abc-` | Abc mutant phenotype |
-| `-loxP:KanMX:loxP::loxP` | Replacement of `loxP:KanMX:loxP` with `loxP`|
 | `X1>p123{geneA geneB}::KanMX+` | Integration of `p123` containing `geneA` and `geneB` at `X1` using `KanMX` marker |
 
 ## JSON-representation
