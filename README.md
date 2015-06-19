@@ -14,7 +14,7 @@ TODO
 
 ## Grammar
 
-The grammar consists of a *space-* or *comma-*separated list** of genotype or phenotype designations described using the following nomenclature:
+The grammar consists of a *space-* or *comma-*separated list of genotype or phenotype designations described using the following nomenclature:
 
 Designation                                 | Grammar expression
 ------------------------------------------- | -------------------------
