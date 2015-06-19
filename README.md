@@ -1,6 +1,8 @@
 # Gnomic
 
-Gnomic is a grammar for describing genotypes and phenotypes of microbial strains. The gnomic grammar is designed to provide a clear, unambiguous, human and machine readable, genotype definition notation with flexibility in the level of detail of the definition. The `gnomic-grammar` NodeJS package contains methods for parsing and analysis of genotype definitions written in gnomic. 
+[![Build Status](https://travis-ci.org/biosustain/gnomic.svg?branch=master)](https://travis-ci.org/biosustain/gnomic)
+
+Gnomic is a grammar for describing genotypes and phenotypes of microbial strains. It is designed to provide an unambiguous, human and machine readable genotype definition notation with flexibility in the level of detail of the definition. The `gnomic-grammar` NodeJS package contains methods for parsing and analysis of genotype definitions written in gnomic. 
 
 ## Installation
 
