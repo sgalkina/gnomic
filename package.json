@@ -1,7 +1,7 @@
 {
-  "name": "Genotype.js",
+  "name": "gnomic-grammar",
   "version": "0.0.0",
-  "description": "",
+  "description": "A small formal grammar for describing microbial genotypes and phenotypes.",
   "main": "index.js",
   "scripts": {
     "test": "mocha --compilers js:mocha-babel test/*.js"
