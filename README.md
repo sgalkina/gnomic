@@ -57,7 +57,7 @@ Term           | Description
 | ------------------------------------- | ------------------------------------- |
 | `X1>{abcD defG}::M2+, XII2>hijK::M2+, M3- ` | integrate vector containg `abcD` and `defG` at `X1` using `M1` marker, insert `hijK` at `XII2` using `M2` marker, state that `M3` marker is available (mutant) in strain
 | `#SGD:YOR202W` | insertion of yeast gene 'YOR202W' referenced in the [Saccharomyces Genome Database (SGD)](http://www.yeastgenome.org/)|
-| `-CAB5#SGD:YDR196C` | deletion of yeast gene 'YDR196C' with standard name 'GAB5' referenced in [SGD](http://www.yeastgenome.org/) |
+| `-CAB5#SGD:YDR196C` | deletion of yeast gene 'YDR196C' with standard name 'CAB5' referenced in [SGD](http://www.yeastgenome.org/) |
 | `+E.coli/abcD::Leu2+` | insertion of _E.coli_ gene 'abcD' using 'Leu2' selection marker
 | `-abcD` | deletion of feature 'abcD' in the parent strain |
 | `+abcD::His5+` | insertion of feature 'abcD' using the 'His5' selection marker |
