@@ -13,7 +13,7 @@ At this point, an NPM package for Gnomic is available. (A PyPi package is planne
 
 TODO
 
-## Grammar definition
+## Grammar
 
 The grammar consists of a *space-* or *comma-*separated list** of genotype or phenotype designations described using the following nomenclature:
 
@@ -42,21 +42,7 @@ coding nucleotide range of a `gene` | ``gene[c.startBase_endBase]``
 protein amino-acid range of a `gene` | ``gene[p.startAA_endAA]``
 protein amino-acid of a `gene` | ``gene[p.base]``		+protein AA of a `gene` | ``gene[p.AA]``
 
-### Potential Excel- and File-safe extensions
-
-Designation                                 | Grammar expression
-------------------------------------------- | -------------------------
-Excel & file-safe insertion, deletion or replacement          | `insert_gene` (eqv. `+gene`), `delete_gene` (eqv. ``-gene``), `replace_site_gene` (eqv. `site>gene`)
-File-safe use of loci and markers           | `insert_gene_at_site_using_markers` (eqv. `+site::gene::marker`)
-File-save spaces between statements | `insert_gene1__delete_gene2` (eqv. `+gene1, -gene2`)
-
-### Proposed grammar additions
-
-Designation                                 | Grammar expression
-------------------------------------------- | -------------------------
-feature name containing spaces or underscores | e.g. `"some feature name"` or `'some feature name'`
-
-### Grammar terms
+### Term definitions
 
 Term           | Description
 -------------- | --------------
