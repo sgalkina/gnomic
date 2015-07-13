@@ -10,64 +10,6 @@ Install the `gnomic-grammar` package via NPM:
 
     npm install gnomic-grammar
 
-## Usage
-
-### Example
-
-```javascript
-> var Genotype = require('gnomic-grammar').Genotype;
-> Genotype.parse('+insertedGene#123 substitutedGeneA>WithGeneB::usingMarker(X)')
-{ ancestor: null,
-  changes:
-   [ { contents: [Object], marker: null },
-     { contents: [Object],
-       site: [Object],
-       marker: [Object],
-       multiple: false } ],
-  addedFeatures:
-   [ { name: 'insertedGene',
-       type: null,
-       accession: [Object],
-       organism: null,
-       variant: null,
-       range: null },
-     { name: 'WithGeneB',
-       type: null,
-       accession: null,
-       organism: null,
-       variant: null,
-       range: null },
-     { name: 'usingMarker',
-       type: 'phene',
-       accession: null,
-       organism: null,
-       variant: 'X',
-       range: null } ],
-  removedFeatures:
-   [ { name: 'substitutedGeneA',
-       type: null,
-       accession: null,
-       organism: null,
-       variant: null,
-       range: null } ],
-  addedEpisomes: [],
-  removedEpisomes: [],
-  sites:
-   [ { name: 'substitutedGeneA',
-       type: null,
-       accession: null,
-       organism: null,
-       variant: null,
-       range: null } ],
-  markers:
-   [ { name: 'usingMarker',
-       type: 'phene',
-       accession: null,
-       organism: null,
-       variant: 'X',
-       range: null } ] }
-```
-
 ## Grammar
 
 The grammar consists of a *space-* or *comma-*separated list of genotype or phenotype designations described using the following nomenclature:
@@ -126,6 +68,65 @@ Term           | Description
 | `Abc-` | Abc mutant phenotype |
 | `p123{}` | Plasmid `p123` present |
 | `X1>p123{geneA geneB}::KanMX+` | Integration of `p123` containing `geneA` and `geneB` at `X1` using `KanMX` marker |
+
+
+## Usage
+
+### Example usage
+
+```javascript
+> var Genotype = require('gnomic-grammar').Genotype;
+> Genotype.parse('+insertedGene#123 substitutedGeneA>WithGeneB::usingMarker(X)')
+{ ancestor: null,
+  changes:
+   [ { contents: [Object], marker: null },
+     { contents: [Object],
+       site: [Object],
+       marker: [Object],
+       multiple: false } ],
+  addedFeatures:
+   [ { name: 'insertedGene',
+       type: null,
+       accession: [Object],
+       organism: null,
+       variant: null,
+       range: null },
+     { name: 'WithGeneB',
+       type: null,
+       accession: null,
+       organism: null,
+       variant: null,
+       range: null },
+     { name: 'usingMarker',
+       type: 'phene',
+       accession: null,
+       organism: null,
+       variant: 'X',
+       range: null } ],
+  removedFeatures:
+   [ { name: 'substitutedGeneA',
+       type: null,
+       accession: null,
+       organism: null,
+       variant: null,
+       range: null } ],
+  addedEpisomes: [],
+  removedEpisomes: [],
+  sites:
+   [ { name: 'substitutedGeneA',
+       type: null,
+       accession: null,
+       organism: null,
+       variant: null,
+       range: null } ],
+  markers:
+   [ { name: 'usingMarker',
+       type: 'phene',
+       accession: null,
+       organism: null,
+       variant: 'X',
+       range: null } ] }
+```
 
 ## JSON-representation
 
