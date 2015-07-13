@@ -1,16 +1,36 @@
 {
   "name": "gnomic-grammar",
   "version": "0.0.0",
-  "description": "A small formal grammar for describing microbial genotypes and phenotypes.",
+  "description": "A grammar for describing microbial genotypes and phenotypes.",
   "main": "index.js",
   "scripts": {
     "test": "mocha --compilers js:mocha-babel test/*.js"
   },
-  "author": "Lars Schöning <lars@lyschoening.de>",
+  "author": {
+    "name": "Lars Schöning",
+    "email": "lays@biosustain.dtu.dk"
+  },
   "license": "MIT",
   "repository" : {
     "type" : "git"
   , "url" : "https://github.com/biosustain/gnomic.git"
+  },
+  "keywords": [
+    "bioinformatics",
+    "biology",
+    "genotype",
+    "phenotype",
+    "genetics",
+    "language",
+    "grammar",
+    "gnomic"
+  ],
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "babel-runtime": "^5.5.8",
+    "pegjs": "^0.8.0"
   },
   "devDependencies": {
     "babel": "^5.5.8",
@@ -25,13 +45,5 @@
     "mocha-babel": "^3.0.0",
     "pegjs": "^0.8.0",
     "requirejs": "^2.1.17"
-  },
-  "jspm": {
-    "directories": {},
-    "devDependencies": {
-      "babel": "npm:babel-core@^5.1.13",
-      "babel-runtime": "npm:babel-runtime@^5.1.13",
-      "core-js": "npm:core-js@^0.9.4"
-    }
   }
 }

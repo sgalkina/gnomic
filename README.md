@@ -10,7 +10,60 @@ Install the `gnomic-grammar` package via NPM:
 
 ## Usage
 
-TODO
+### Example
+
+    > var Genotype = require('gnomic-grammar').Genotype;
+    > Genotype.parse('+insertedGene#123 substitutedGeneA>WithGeneB::usingMarker(X)')
+    { ancestor: null,
+      changes:
+       [ { contents: [Object], marker: null },
+         { contents: [Object],
+           site: [Object],
+           marker: [Object],
+           multiple: false } ],
+      addedFeatures:
+       [ { name: 'insertedGene',
+           type: null,
+           accession: [Object],
+           organism: null,
+           variant: null,
+           range: null },
+         { name: 'WithGeneB',
+           type: null,
+           accession: null,
+           organism: null,
+           variant: null,
+           range: null },
+         { name: 'usingMarker',
+           type: 'phene',
+           accession: null,
+           organism: null,
+           variant: 'X',
+           range: null } ],
+      removedFeatures:
+       [ { name: 'substitutedGeneA',
+           type: null,
+           accession: null,
+           organism: null,
+           variant: null,
+           range: null } ],
+      addedEpisomes: [],
+      removedEpisomes: [],
+      sites:
+       [ { name: 'substitutedGeneA',
+           type: null,
+           accession: null,
+           organism: null,
+           variant: null,
+           range: null } ],
+      markers:
+       [ { name: 'usingMarker',
+           type: 'phene',
+           accession: null,
+           organism: null,
+           variant: 'X',
+           range: null } ] }
+
 
 ## Grammar
 

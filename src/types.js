@@ -1,3 +1,5 @@
+import {parse} from './genotype.js';
+
 /**
  * Created by lyschoening on 5/19/15.
  */
@@ -103,6 +105,10 @@ export class Genotype {
         this.removedEpisomes = Object.freeze(episomes.removed);
         this.sites = Object.freeze(sites);
         this.markers = Object.freeze(markers);
+    }
+
+    static parse(string, ancestor = null) {
+        return new Genotype(ancestor, parse(string));
     }
 
     //toString() {

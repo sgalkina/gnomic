@@ -20,9 +20,11 @@ gulp.task('peg:compile', function () {
 gulp.task('babel', function () {
     return gulp.src(['./src/*.js'])
         .pipe(babel({
-            modules: 'system',
+            modules: 'common',
             optional: ['runtime'],
             stage: 0
         }))
         .pipe(gulp.dest('./dist/'));
 });
+
+gulp.task('dist', ['babel']);
