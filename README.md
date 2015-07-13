@@ -77,6 +77,10 @@ Term           | Description
 ```javascript
 > var Genotype = require('gnomic-grammar').Genotype;
 > Genotype.parse('+insertedGene#123 substitutedGeneA>WithGeneB::usingMarker(X)')
+// new Genotype(null, [
+//     new Insertion(new Feature('insertedGene', {accession: new Accession(123))),
+//     new Replacement(new Feature('WithGene'), new Feature('substitutedGeneA'), new Phene('X'))
+// ])
 { ancestor: null,
   changes:
    [ { contents: [Object], marker: null },
