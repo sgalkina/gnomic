@@ -14,6 +14,8 @@ Install the `gnomic-grammar` package via NPM:
 
 ### Example
 
+```javascript
+
     > var Genotype = require('gnomic-grammar').Genotype;
     > Genotype.parse('+insertedGene#123 substitutedGeneA>WithGeneB::usingMarker(X)')
     { ancestor: null,
@@ -66,6 +68,7 @@ Install the `gnomic-grammar` package via NPM:
            variant: 'X',
            range: null } ] }
 
+```
 
 ## Grammar
 
