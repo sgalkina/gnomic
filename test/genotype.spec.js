@@ -38,6 +38,13 @@ describe('Genotypes', function() {
         expect(g.markers).to.have.members([marker1, marker2, marker3]);
     });
 
+    it('should work with phenotypes.', function() {
+        var g = new Genotype(null, [
+            new Phene('Phene', {variant: 'foo'})
+        ]);
+
+        expect(g.addedFeatures).to.deep.have.members([new Phene('Phene', {variant: 'foo'})]);
+    });
 
     it('should work with multiple generations.', function() {
         var g1 = new Genotype(null, [

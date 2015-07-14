@@ -56,6 +56,8 @@ export class Genotype {
                     console.warn('Deprecated: Insertion of a plasmid with insertion site as episome.');
                     change = plasmid.toInsertion();
                 }
+            } else if(change instanceof Phene) {
+                change = change.toInsertion();
             }
 
             if(change instanceof Insertion) {
@@ -386,6 +388,9 @@ export class Phene extends Feature {
      */
     constructor(name, {organism = null, variant='wild-type'} = {}) {
         super(name, {type: 'phene', organism, variant})
+    }
+    toInsertion() {
+        return new Insertion(this);
     }
 }
 
