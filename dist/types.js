@@ -1,24 +1,16 @@
 'use strict';
 
-var _createClass = require('babel-runtime/helpers/create-class')['default'];
-
-var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
-
-var _get = require('babel-runtime/helpers/get')['default'];
-
-var _inherits = require('babel-runtime/helpers/inherits')['default'];
-
-var _Array$from = require('babel-runtime/core-js/array/from')['default'];
-
-var _getIterator = require('babel-runtime/core-js/get-iterator')['default'];
-
-var _Object$freeze = require('babel-runtime/core-js/object/freeze')['default'];
-
-var _regeneratorRuntime = require('babel-runtime/regenerator')['default'];
-
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
+
+var _get = function get(_x15, _x16, _x17) { var _again = true; _function: while (_again) { var object = _x15, property = _x16, receiver = _x17; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x15 = parent; _x16 = property; _x17 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var _genotypeJs = require('./genotype.js');
 
@@ -55,8 +47,8 @@ var Genotype = (function () {
         // features based on the range or describing the mutation in the variant string.
 
         // TODO enumerate all features from the changes.
-        var sites = this.ancestor ? _Array$from(this.ancestor.sites) : []; // any features used like sites
-        var markers = this.ancestor ? _Array$from(this.ancestor.markers) : []; // any features/phenes used like markers
+        var sites = this.ancestor ? Array.from(this.ancestor.sites) : []; // any features used like sites
+        var markers = this.ancestor ? Array.from(this.ancestor.markers) : []; // any features/phenes used like markers
 
         // TODO also remove markers from features
         // TODO combine features and phenes somehow
@@ -79,7 +71,7 @@ var Genotype = (function () {
         var _iteratorError = undefined;
 
         try {
-            for (var _iterator = _getIterator(changes), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            for (var _iterator = changes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                 var change = _step.value;
 
                 if (change instanceof Plasmid) {
@@ -102,7 +94,7 @@ var Genotype = (function () {
                     var _iteratorError2 = undefined;
 
                     try {
-                        for (var _iterator2 = _getIterator(change.contents.features()), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                        for (var _iterator2 = change.contents.features()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                             var feature = _step2.value;
 
                             features.removed = remove(features.removed, feature);
@@ -136,7 +128,7 @@ var Genotype = (function () {
                     var _iteratorError3 = undefined;
 
                     try {
-                        for (var _iterator3 = _getIterator(change.contents.features()), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                        for (var _iterator3 = change.contents.features()[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
                             var feature = _step3.value;
 
                             features.removed = remove(features.removed, feature);
@@ -168,7 +160,7 @@ var Genotype = (function () {
                         var _iteratorError4 = undefined;
 
                         try {
-                            for (var _iterator4 = _getIterator(change.contents.features()), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                            for (var _iterator4 = change.contents.features()[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
                                 var feature = _step4.value;
 
                                 features.added = remove(features.added, feature);
@@ -199,6 +191,8 @@ var Genotype = (function () {
                     features.added = upsert(features.added, change.marker);
                 }
             }
+
+            // TODO freeze with Object.freeze()
         } catch (err) {
             _didIteratorError = true;
             _iteratorError = err;
@@ -214,13 +208,12 @@ var Genotype = (function () {
             }
         }
 
-        // TODO freeze with Object.freeze()
-        this.addedFeatures = _Object$freeze(features.added);
-        this.removedFeatures = _Object$freeze(features.removed);
-        this.addedEpisomes = _Object$freeze(episomes.added);
-        this.removedEpisomes = _Object$freeze(episomes.removed);
-        this.sites = _Object$freeze(sites);
-        this.markers = _Object$freeze(markers);
+        this.addedFeatures = Object.freeze(features.added);
+        this.removedFeatures = Object.freeze(features.removed);
+        this.addedEpisomes = Object.freeze(episomes.added);
+        this.removedEpisomes = Object.freeze(episomes.removed);
+        this.sites = Object.freeze(sites);
+        this.markers = Object.freeze(markers);
     }
 
     _createClass(Genotype, [{
@@ -248,19 +241,19 @@ var Genotype = (function () {
                 });
             }
         }
-    }, {
-        key: 'features',
 
         /**
          * A list of insertions and deletions on a gene level. On
          * @param inclusive
          */
-        value: _regeneratorRuntime.mark(function features() {
+    }, {
+        key: 'features',
+        value: regeneratorRuntime.mark(function features() {
             var inclusive = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
 
             var _iteratorNormalCompletion5, _didIteratorError5, _iteratorError5, _loop, _iterator5, _step5;
 
-            return _regeneratorRuntime.wrap(function features$(context$2$0) {
+            return regeneratorRuntime.wrap(function features$(context$2$0) {
                 var _this2 = this;
 
                 while (1) switch (context$2$0.prev = context$2$0.next) {
@@ -277,9 +270,9 @@ var Genotype = (function () {
                         _didIteratorError5 = false;
                         _iteratorError5 = undefined;
                         context$2$0.prev = 5;
-                        _loop = _regeneratorRuntime.mark(function callee$2$0() {
+                        _loop = regeneratorRuntime.mark(function callee$2$0() {
                             var feature;
-                            return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                            return regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
                                 while (1) switch (context$3$0.prev = context$3$0.next) {
                                     case 0:
                                         feature = _step5.value;
@@ -300,7 +293,7 @@ var Genotype = (function () {
                                 }
                             }, callee$2$0, _this2);
                         });
-                        _iterator5 = _getIterator(this.ancestor.features());
+                        _iterator5 = this.ancestor.features()[Symbol.iterator]();
 
                     case 8:
                         if (_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done) {
@@ -468,23 +461,23 @@ var FeatureTree = (function () {
         this.contents = contents;
     }
 
+    /**
+     * Enumerates all features of the feature tree.
+     */
+
     _createClass(FeatureTree, [{
         key: 'features',
-
-        /**
-         * Enumerates all features of the feature tree.
-         */
-        value: _regeneratorRuntime.mark(function features() {
+        value: regeneratorRuntime.mark(function features() {
             var _iteratorNormalCompletion6, _didIteratorError6, _iteratorError6, _iterator6, _step6, item;
 
-            return _regeneratorRuntime.wrap(function features$(context$2$0) {
+            return regeneratorRuntime.wrap(function features$(context$2$0) {
                 while (1) switch (context$2$0.prev = context$2$0.next) {
                     case 0:
                         _iteratorNormalCompletion6 = true;
                         _didIteratorError6 = false;
                         _iteratorError6 = undefined;
                         context$2$0.prev = 3;
-                        _iterator6 = _getIterator(this.contents);
+                        _iterator6 = this.contents[Symbol.iterator]();
 
                     case 5:
                         if (_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done) {
@@ -579,10 +572,10 @@ var Group = (function (_FeatureTree) {
         _get(Object.getPrototypeOf(Group.prototype), 'constructor', this).apply(this, contents);
     }
 
+    // TODO compare all features from both groups.
+
     _createClass(Group, [{
         key: 'equals',
-
-        // TODO compare all features from both groups.
         value: function equals() {
             return false;
         }
@@ -642,11 +635,11 @@ var Plasmid = (function (_FeatureTree2) {
         value: function isEpisome() {
             return this.site == null;
         }
-    }, {
-        key: 'equals',
 
         // TODO An integrated plasmid and an insertion are identical.
 
+    }, {
+        key: 'equals',
         value: function equals(other) {
             if (this.name) {
                 return this.name == other.name;
@@ -754,13 +747,13 @@ var Feature = (function () {
 
             return s;
         }
-    }, {
-        key: 'equals',
 
         /**
          * Compares two features ignoring the 'variant' flag.
          * @param {(Feature|Phene)} other
          */
+    }, {
+        key: 'equals',
         value: function equals(other) {
             if (this.accession && other.accession) {
                 return this.accession.equals(other.accession);
@@ -801,6 +794,12 @@ var Phene = (function (_Feature) {
         _get(Object.getPrototypeOf(Phene.prototype), 'constructor', this).call(this, name, { type: 'phene', organism: organism, variant: variant });
     }
 
+    /**
+     *
+     */
+
+    // TODO make zero-indexed and disallow points
+
     _createClass(Phene, [{
         key: 'toInsertion',
         value: function toInsertion() {
@@ -812,12 +811,6 @@ var Phene = (function (_Feature) {
 })(Feature);
 
 exports.Phene = Phene;
-
-/**
- *
- */
-
-// TODO make zero-indexed and disallow points
 
 var Range = (function () {
     /**
