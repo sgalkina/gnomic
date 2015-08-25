@@ -204,6 +204,13 @@ describe('Language parser', function() {
         ]);
     });
 
+    it('should allow an episome with a selection marker', function() {
+        expect(parse('p1{}::m+ p2{a}::m(R)')).to.deep.equal([
+            new Plasmid('p1', null, new Phene('m')),
+            new Plasmid('p2', null, new Phene('m', {variant: 'R'}), new Feature('a'))
+        ]);
+    });
+
     it('should handle multiple things', function() {
         expect(parse('-a +b c>>d p{}')).to.deep.equal([
         new Deletion(new Feature('a')),

@@ -10,7 +10,7 @@ change
     = insertion
     / replacement
     / deletion
-    / plasmid 
+    / episome
     / phene
 
 insertion
@@ -28,6 +28,9 @@ insertable
     / fs:feature_set { return new types.Group(...fs) }
     / fusion
     / feature
+
+episome
+    = p:plasmid m:marker? { p.marker = m; return p }
 
 plasmid
     = name:identifier fs:feature_set { return new types.Plasmid(name, null, null, ...fs) }
