@@ -1,10 +1,12 @@
 {
   "name": "gnomic-grammar",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A grammar for describing microbial genotypes and phenotypes.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --compilers js:mocha-babel test/*.js"
+    "test": "mocha --compilers js:mocha-babel test/*.js",
+    "compile": "babel -d dist/ src/ --stage=0 --module=common",
+    "prepublish": "npm run compile"
   },
   "author": {
     "name": "Lars Schöning",
