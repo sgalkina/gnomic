@@ -32,9 +32,9 @@ phenotype: wild-type                      | ``phene+`` or ``phene(wild-type)``
 phenotype: mutant                         | ``phene-`` or ``phene`` or ``phene(mutant)``
 selection marker: used (wild-type)         | ``marker+``
 selection marker: available (missing/mutant) | ``marker-``
-a non-integrated episome | ``episome{}`` or ``episome{feature, [...]}``
-episome with selection marker | ``episome{feature, [...]}::marker+``
-integrated vector with mandatory integration site | ``+site::vector{feature, [...]}``
+a non-integrated plasmid | ``plasmid{}`` or ``plasmid{feature, [...]}``
+plasmid with selection marker | ``plasmid{feature, [...]}::marker+``
+integrated vector/plasmid with mandatory integration site | ``site>vector{feature, [...]}``
 nucleotide range of a `feature` | ``feature[startBase_endBase]``
 coding nucleotide range of a `gene` | ``gene[c.startBase_endBase]``
 protein amino-acid range of a `gene` | ``gene[p.startAA_endAA]``
@@ -115,8 +115,8 @@ Term           | Description
        organism: null,
        variant: null,
        range: null } ],
-  addedEpisomes: [],
-  removedEpisomes: [],
+  addedPlasmids: [],
+  removedPlasmids: [],
   sites:
    [ { name: 'substitutedGeneA',
        type: null,
