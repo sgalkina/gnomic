@@ -70,8 +70,11 @@ fusion
     = start:feature rest:(":" f:feature { return f })+ { return new types.Fusion(...[start].concat(rest)) }
 
 variant
-    = "(" v:identifier ")" { return v }
+    = "(" v:variant_definition ")" { return v }
     / v:binary_variant { return v }
+
+variant_definition
+    = start:identifier rest:([,;] sep* v:identifier {return v})* { return [start].concat(rest).join(', ')}
 
 binary_variant
     = "+" { return 'wild-type' }
@@ -103,4 +106,4 @@ list_separator
     / sep+
 
 sep
-    = [ \t\r\n]
+    = [ \t]

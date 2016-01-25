@@ -1,4 +1,5 @@
-import {Feature, Phene, Plasmid, Genotype, Insertion, Deletion, Replacement, Fusion, Group} from '../src/types';
+import {Feature, Phene, Plasmid, Insertion, Deletion, Replacement, Fusion, Group} from '../src/models.js';
+import {Genotype} from '../src/genotype.js';
 import {expect} from 'chai';
 
 describe('Genotypes', function() {
@@ -61,6 +62,63 @@ describe('Genotypes', function() {
         expect(g2.removedFeatures).to.deep.have.members([new Feature('gene1')]);
 
         expect(g2.addedFeatures).to.be.empty;
-        expect(Array.from(g2.features(true))).to.deep.have.members([new Feature('gene1')]);
+        expect(Array.from(g2.features())).to.deep.have.members([new Feature('gene2')]);
     })
+
+    //
+    //it('should handle deletion of a specific variant', function() {
+    //    var g1 = new Genotype(null, [
+    //        new Deletion(new Group(
+    //            new Feature('gene1', {variant: 'a'}),
+    //            new Feature('gene1', {variant: 'b'})))
+    //    ]);
+    //
+    //    expect(g1.removedFeatures).to.deep.have.members([
+    //        new Feature('gene1', {variant: 'a'}),
+    //        new Feature('gene1', {variant: 'b'})
+    //    ]);
+    //
+    //    var g2 = new Genotype(g1, [
+    //        new Insertion(new Feature('gene1', {variant: 'b'})),
+    //        new Deletion(new Feature('gene1', {variant: 'c'})),
+    //        new Insertion(new Feature('gene1', {variant: 'd'}))
+    //    ]);
+    //
+    //    expect(g2.removedFeatures).to.deep.have.members([
+    //        new Feature('gene1', {variant: 'c'})
+    //    ]);
+    //
+    //    expect(Array.from(g2.features(true))).to.deep.have.members([
+    //        new Feature('gene1', {variant: 'a'}),
+    //        new Feature('gene1', {variant: 'c'})
+    //    ]);
+    //
+    //    expect(g2.addedFeatures).to.deep.have.members([
+    //        new Feature('gene1', {variant: 'b'}),
+    //        new Feature('gene1', {variant: 'd'})
+    //    ]);
+    //
+    //    var g3ins = new Genotype(g2, [
+    //        new Insertion(new Feature('gene1'))
+    //    ]);
+    //
+    //    expect(g3ins.addedFeatures).to.deep.have.members([
+    //        new Feature('gene1')
+    //    ]);
+    //
+    //    console.log('ex', Array.from(g3ins.features()))
+    //    expect(Array.from(g3ins.features())).to.deep.have.members([
+    //        new Feature('gene1')
+    //    ]);
+    //
+    //    var g3del = new Genotype(g2, [
+    //        new Deletion(new Feature('gene1'))
+    //    ]);
+    //
+    //    expect(g3del.removedFeatures).to.deep.have.members([
+    //        new Feature('gene1')
+    //    ]);
+    //
+    //    expect(Array.from(g3del.features())).to.deep.have.members([]);
+    //})
 });

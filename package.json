@@ -13,9 +13,9 @@
     "email": "lays@biosustain.dtu.dk"
   },
   "license": "MIT",
-  "repository" : {
-    "type" : "git"
-  , "url" : "https://github.com/biosustain/gnomic.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/biosustain/gnomic.git"
   },
   "keywords": [
     "bioinformatics",

@@ -1,6 +1,7 @@
 
 module.exports = {
-    parse: require('./dist/genotype.js').parse,
+    parse: require('./dist/grammar.js').parse,
+    Genotype = require('./dist/genotype.js').Genotype
 };
 
 var types = require('./dist/types.js');

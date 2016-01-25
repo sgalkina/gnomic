@@ -8,10 +8,10 @@ var babel = require('gulp-babel');
 var replace = require('gulp-replace');
 
 gulp.task('peg:compile', function () {
-    gulp.src('./genotype.pegjs')
+    gulp.src('./grammar.pegjs')
         .pipe(peg().on('error', gutil.log))
         .pipe(replace(/^module.exports = /g,
-            "import * as types from './types';\n" +
+            "import * as types from './models.js';\n" +
             "\n" +
             "export const {SyntaxError, parse} = "))
         .pipe(gulp.dest('./src/'))

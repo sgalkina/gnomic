@@ -1,5 +1,5 @@
-import {parse, SyntaxError} from '../src/genotype';
-import {Feature, Accession, Phene, Plasmid, Fusion, Group, Organism, Replacement, Insertion, Deletion} from '../src/types';
+import {parse, SyntaxError} from '../src/grammar.js';
+import {Feature, Accession, Phene, Plasmid, Fusion, Group, Organism, Replacement, Insertion, Deletion} from '../src/models.js';
 import {expect} from 'chai';
 
 
