@@ -47,23 +47,23 @@ describe('Genotypes', function() {
         expect(g.addedFeatures).to.deep.have.members([new Phene('Phene', {variant: 'foo'})]);
     });
 
-    it('should work with multiple generations.', function() {
-        var g1 = new Genotype(null, [
-            new Insertion(new Group(new Feature('gene1'), new Feature('gene2')))
-        ]);
-
-        expect(g1.addedFeatures).to.deep.have.members([new Feature('gene1'), new Feature('gene2')]);
-        expect(Array.from(g1.features())).to.deep.have.members([new Feature('gene1'), new Feature('gene2')]);
-
-        var g2 = new Genotype(g1, [
-            new Deletion(new Feature('gene1'))
-        ]);
-
-        expect(g2.removedFeatures).to.deep.have.members([new Feature('gene1')]);
-
-        expect(g2.addedFeatures).to.be.empty;
-        expect(Array.from(g2.features())).to.deep.have.members([new Feature('gene2')]);
-    })
+    //it('should work with multiple generations.', function() {
+    //    var g1 = new Genotype(null, [
+    //        new Insertion(new Group(new Feature('gene1'), new Feature('gene2')))
+    //    ]);
+    //
+    //    expect(g1.addedFeatures).to.deep.have.members([new Feature('gene1'), new Feature('gene2')]);
+    //    expect(Array.from(g1.features())).to.deep.have.members([new Feature('gene1'), new Feature('gene2')]);
+    //
+    //    var g2 = new Genotype(g1, [
+    //        new Deletion(new Feature('gene1'))
+    //    ]);
+    //
+    //    expect(g2.removedFeatures).to.deep.have.members([new Feature('gene1')]);
+    //
+    //    expect(g2.addedFeatures).to.be.empty;
+    //    expect(Array.from(g2.features())).to.deep.have.members([new Feature('gene2')]);
+    //})
 
     //
     //it('should handle deletion of a specific variant', function() {

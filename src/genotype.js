@@ -1,4 +1,5 @@
 import {Plasmid, Phene, Insertion, Replacement, Deletion} from './models.js';
+import {parse} from './grammar.js';
 
 export class Genotype {
     /**
