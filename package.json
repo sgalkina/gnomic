@@ -1,6 +1,6 @@
 {
   "name": "gnomic-grammar",
-  "version": "0.1.4",
+  "version": "0.1.10",
   "description": "A grammar for describing microbial genotypes and phenotypes.",
   "main": "index.js",
   "scripts": {

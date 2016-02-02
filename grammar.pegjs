@@ -63,8 +63,8 @@ feature_organism
     = o:organism "/" { return new types.Organism(o) }
 
 feature_set
-    = "{" start:(f:(fusion/feature) list_separator { return f })* last:(fusion/feature) "}" { return start.concat(last) }
-    / "{" f:(fusion/feature) "}" { return [f] }
+    = "{" sep? start:(f:(fusion/feature) list_separator { return f })* last:(fusion/feature) sep? "}" { return start.concat(last) }
+    / "{" sep?  f:(fusion/feature) sep? "}" { return [f] }
 
 fusion
     = start:feature rest:(":" f:feature { return f })+ { return new types.Fusion(...[start].concat(rest)) }
@@ -90,13 +90,13 @@ accession
     / "#" id:(integer/identifier) { return new types.Accession(id); }
 
 database
-    = $([A-Za-z0-9-][A-Za-z0-9]+)
+    = $([A-Za-z0-9]+([\-][A-Za-z0-9]+)*)
 
 integer "integer"
     = digits:[0-9]+ { return parseInt(digits.join(""), 10); }
 
 identifier
-    = $([A-Za-z0-9]+([A-Za-z0-9_-]+[A-Za-z0-9])?)
+    = $([A-Za-z0-9]+([_\-][A-Za-z0-9]+)*)
 
 organism
     = $([a-zA-Z0-9]+("."[a-zA-Z0-9]+)?)
