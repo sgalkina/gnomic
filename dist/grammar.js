@@ -86,7 +86,7 @@ var _ref = function () {
       return new types.Mutation(d, null, { marker: m });
     },
         peg$c19 = function peg$c19(fs) {
-      return new (Function.prototype.bind.apply(types.Group, [null].concat((0, _toConsumableArray3.default)(fs))))();
+      return fs;
     },
         peg$c20 = function peg$c20(p, m) {
       p.marker = m;return p;
