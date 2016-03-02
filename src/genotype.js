@@ -1,5 +1,7 @@
-import {Plasmid, Phene, Insertion, Replacement, Deletion} from './models.js';
+import {Mutation, Feature, Plasmid, Phene} from './models.js';
 import {parse} from './grammar.js';
+
+export const FUSION_MATCH_WHOLE = 'match-whole-fusions';
 
 export class Genotype {
     /**
@@ -7,13 +9,12 @@ export class Genotype {
      * Only one variant of a gene is considered realistic, so an insertion of a gene with a variant replaces the
      * gene without the variant. This may need to change to allow multiple non-wildtype variants.
      *
-     *
-     * @param ancestor
-     * @param {...(Insertion|Replacement|Deletion|Plasmid)} changes
+     * @param {(Insertion|Replacement|Deletion|Plasmid)} changes
+     * @param parent
      */
-    constructor(ancestor=null, changes) {
-        this.ancestor = ancestor;
-        this.changes = changes;
+    constructor(changes, {parent=null, fusionStrategy=FUSION_MATCH_WHOLE} = {}) {
+        this.parent = parent;
+        this.raw = Object.freeze(changes);
 
         // TODO currently the code must assume that naming is consistent. i.e. if a feature
         // has only a name, it always has a name, if it has only an accession, it always has an accession.
@@ -22,134 +23,159 @@ export class Genotype {
         // NOTE ranges are currently ignored; proper handling of ranges would require splitting/merging etc. of
         // features based on the range or describing the mutation in the variant string.
 
-        // TODO enumerate all features from the changes.
-        var sites = this.ancestor ? Array.from(this.ancestor.sites) : []; // any features used like sites
-        var markers = this.ancestor ? Array.from(this.ancestor.markers) :  []; // any features/phenes used like markers
-
-        // TODO also remove markers from features
-        // TODO combine features and phenes somehow
-
-        var features = {added: [], removed: []};
-        var episomes = {added: [],removed: []};
-
-        function remove(array, value) {
-            return array.filter((item) => !value.match(item));
+        function remove(items, value, ...args) {
+            for(let item of items.filter((item) => value.match(item, ...args))) {
+                items.splice(items.indexOf(item), 1);
+                // FIXME support removing multiple copies
+            }
+            return items;
         }
 
-        function upsert(array, value) {
-            return remove(array, value).concat([value]);
+        function upsert(items, value, ...args) {
+            remove(items, value, ...args);
+            items.push(value);
+            return items;
         }
+
+        function removeOrExclude(addedItems, removedItems, value) {
+            for(let item of addedItems) {
+                if(item.equals(value)) {
+                    return [remove(addedItems, value), removedItems]
+                }
+            }
+
+            return [remove(addedItems, value), upsert(removedItems, value)]
+        }
+
+        //def remove_or_exclude(added_features, removed_features, exclude):
+        //  for feature in added_features:
+        //      if exclude == feature:
+        //  return remove(added_features, exclude), removed_features
+        //  return remove(added_features, exclude), upsert(removed_features, exclude)
+
+        let sites = parent ? Array.from(parent.sites) : [];
+        let markers = parent ? Array.from(parent.markers) : [];
+        let addedPlasmids = parent ? Array.from(parent.addedPlasmids) : [];
+        let removedPlasmids = parent ? Array.from(parent.removedPlasmids) : [];
+
+        let addedFeatures = parent ? Array.from(parent.addedFeatures) : [];
+        let removedFeatures = parent ? Array.from(parent.removedFeatures) : [];
+
+        let addedFusionFeatures = parent ? Array.from(parent.addedFusionFeatures) : [];
+        let removedFusionFeatures = parent ? Array.from(parent.removedFusionFeatures) : [];
 
         for(let change of changes) {
+
+            // addition of an un-integrated plasmid
             if(change instanceof Plasmid) {
-                let plasmid = change;
-                if(plasmid.isEpisome()) {
-                    episomes.removed = remove(episomes.removed, plasmid);
-                    episomes.added = upsert(episomes.added, plasmid);
-                    continue;
-                } else {
-                    console.warn('Deprecated: Insertion of a plasmid with insertion site as episome.');
-                    change = plasmid.toInsertion();
-                }
-            } else if(change instanceof Phene) {
-                change = change.toInsertion();
-            }
+                upsert(addedPlasmids, change);
+                removeOrExclude(removedPlasmids, change);
+            } else if(change instanceof Feature) {
+                upsert(addedFeatures, change, false);
+                remove(removedFeatures, change, false);
 
-            if(change instanceof Insertion) {
-                for(let feature of change.contents.features()) {
-                    features.removed = remove(features.removed, feature);
-                    features.added = upsert(features.added, feature);
-                    console.log('ins', features.removed, features.added, feature)
-                }
-            } else if(change instanceof Replacement) {
-                // NOTE if an insertion site is within a fusion, the fusion needs to be replaced.
-                //      Likewise, if a deleted feature is within a fusion, that fusion, too, needs to be replaced.
-                sites = upsert(sites, change.site);
-                markers = remove(markers, change.site);
+                // fusion-sensitive implementation:
+                upsert(addedFusionFeatures, change, false);
+                remove(removedFusionFeatures, change, false);
+            } else {
 
-                features.added = remove(features.added, change.site);
-                features.removed = upsert(features.removed, change.site);
+                // deletion of a plasmid; change.after MUST be null
+                if (change.before instanceof Plasmid) {
+                    remove(addedPlasmids, change.before);
+                    upsert(removedPlasmids, change.before);
+                } else if(change.before !== null) {
+                    // deletion of one (or more) features or fusions
+                    for(let feature of change.before.features()) {
+                        removeOrExclude(addedFeatures, removedFeatures, feature);
+                    }
 
-                for(let feature of change.contents.features()) {
-                    features.removed = remove(features.removed, feature);
-                    features.added = upsert(features.added, feature);
-                }
-            } else { // change instanceof Deletion
-                if(change.contents instanceof Plasmid) {
-                    let plasmid = change;
-                    episomes.added = remove(episomes.added, plasmid);
-                    episomes.removed = upsert(episomes.removed, plasmid);
-                } else {
-                    for(let feature of change.contents.features()) {
-                        features.added = remove(features.added, feature);
-                        features.removed = upsert(features.removed, feature);
+                    if(fusionStrategy != FUSION_MATCH_WHOLE) {
+                        throw `Unsupported fusion strategy: ${fusionStrategy}`;
+                    }
+
+                    switch (fusionStrategy) {
+                        case FUSION_MATCH_WHOLE:
+                            for (let featureOrFusion of change.before) {
+                                removeOrExclude(addedFusionFeatures, removedFusionFeatures, featureOrFusion);
+                            }
+                            break;
                     }
                 }
-            }
 
-            // Any marker is added (variant applied) at the very end
-            if(change.marker) {
-                markers = upsert(markers, change.marker);
+                if(change.after !== null) {
+                    // insertion of one (or more) features or fusions
+                    for(let feature of change.after.features()) {
+                        upsert(addedFeatures, feature);
+                        remove(removedFeatures, feature);
+                    }
 
-                features.removed = remove(features.removed, change.marker);
-                features.added = upsert(features.added, change.marker);
+                    // fusion-sensitive implementation:
+                    for (let featureOrFusion of change.after) {
+                        upsert(addedFusionFeatures, featureOrFusion);
+                        remove(removedFusionFeatures, featureOrFusion);
+                    }
+                }
+
+                if(change.before !== null && change.after !== null) {
+                    // in a replacement, the removed part MUST be a single feature
+                    upsert(sites, change.before.contents[0])
+                }
+
+                if(change.marker !== null) {
+                    // FIXME markers need to be updated also when regular features are updated.
+                    upsert(markers, change.marker, false);
+                    upsert(addedFeatures, change.marker, false);
+                    remove(removedFeatures, change.marker, false);
+                    upsert(addedFusionFeatures, change.marker, false);
+                    remove(removedFusionFeatures, change.marker, false);
+                }
             }
         }
 
-        // TODO freeze with Object.freeze()
-        this.addedFeatures = Object.freeze(features.added);
-        this.removedFeatures = Object.freeze(features.removed);
-        this.addedEpisomes = Object.freeze(episomes.added);
-        this.removedEpisomes = Object.freeze(episomes.removed);
+        this.addedPlasmids = Object.freeze(addedPlasmids);
+        this.removedPlasmids = Object.freeze(removedPlasmids);
+        this.addedFeatures = Object.freeze(addedFeatures);
+        this.removedFeatures = Object.freeze(removedFeatures);
+        this.addedFusionFeatures = Object.freeze(addedFusionFeatures);
+        this.removedFusionFeatures = Object.freeze(removedFusionFeatures);
         this.sites = Object.freeze(sites);
         this.markers = Object.freeze(markers);
     }
 
-    static parse(string, ancestor = null) {
-        return new Genotype(ancestor, parse(string));
+    static parse(string, {parent = null, fusionStrategy=FUSION_MATCH_WHOLE} = {}) {
+        return new Genotype(parse(string), {parent, fusionStrategy});
     }
 
-    //toString() {
-    //
-    //}
+    *iterChanges(fusions = false) {
+        if(fusions) {
+            for(let feature of this.addedFusionFeatures) {
+                yield Mutation.Ins(feature);
+            }
 
-    /**
-     * A list of all episomes in the genotype
-     */
-    episomes(inclusive=true) {
-        if(inclusive || !this.ancestor) {
-            return this.addedEpisomes;
+            for(let feature of this.removedFusionFeatures) {
+                yield Mutation.Del(feature);
+            }
         } else {
-            return this.addedEpisomes
-                .filter((episome) => !this.ancestor.addedEpisomes.some((e) => episome.equals(e)));
+            for(let feature of this.addedFeatures) {
+                yield Mutation.Ins(feature);
+            }
+
+            for(let feature of this.removedFeatures) {
+                yield Mutation.Del(feature);
+            }
+
+        }
+
+        for(let plasmid of this.addedPlasmids) {
+            yield plasmid;
+        }
+
+        for(let plasmid of this.removedPlasmids) {
+            yield Mutation.Del(plasmid);
         }
     }
 
-    /**
-     * A list of insertions and deletions on a gene level. On
-     * @param removed
-     */
-    *features(removed = false) {
-        if(removed) {
-            yield *this.removedFeatures;
-
-            if(this.ancestor) {
-                for(let feature of this.ancestor.features(true)) {
-                    if(!this.addedFeatures.some((f) => f.match(feature))) {
-                        yield feature;
-                    }
-                }
-            }
-        } else {
-            yield *this.addedFeatures;
-
-            if(this.ancestor) {
-                for(let feature of this.ancestor.features(false)) {
-                    if(!this.removedFeatures.some((f) => feature.match(f))) {
-                        yield feature;
-                    }
-                }
-            }
-        }
+    changes(fusions = false) {
+        return Array.from(this.iterChanges(fusions))
     }
 }

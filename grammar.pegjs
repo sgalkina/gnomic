@@ -14,14 +14,14 @@ change
     / phene
 
 insertion
-    = "+" i:insertable m:marker? { return new types.Insertion(i, m) }
+    = "+" i:insertable m:marker? { return new types.Mutation(null, i, {marker: m}) }
 
 replacement
-    = s:feature ">" i:insertable m:marker? { return new types.Replacement(s, i, m) }
-    / s:feature ">>" i:insertable m:marker? { return new types.Replacement(s, i, m, true) }
+    = s:feature ">" i:insertable m:marker? { return new types.Mutation(s, i, {marker: m}) }
+    / s:feature ">>" i:insertable m:marker? { return new types.Mutation(s, i, {marker: m, multiple: true}) }
 
 deletion
-    = "-" d:insertable m:marker? { return new types.Deletion(d, m) }
+    = "-" d:insertable m:marker? { return new types.Mutation(d, null, {marker: m}) }
 
 insertable
     = plasmid

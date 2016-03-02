@@ -1,80 +1,42 @@
 import {parse} from './grammar.js';
 
-/**
- * Created by lyschoening on 5/19/15.
- */
 
+export class Mutation {
+    constructor(before, after, {marker=null, multiple=false} = {}) {
 
-// TODO ranges are not currently supported because they make the logic of computing a genotype radically more difficult
-
-export class Deletion {
-
-    /**
-     *
-     * e.g.
-     *  -pExample()         (deletion of an episome)
-     *  -abcD               (deletion of a feature)
-     *  -abcD[c.12_34]      (deletion of part of a gene)
-     *
-     *
-     * @param {(Feature|FeatureTree)} deletion delible
-     * @param {(string|null)} marker selection marker
-     *
-     */
-    constructor(deletion, marker=null) {
-        if(deletion instanceof Feature) {
-            deletion = new FeatureTree(deletion);
-        }
-        this.contents = deletion;
-        this.marker = marker;
-    }
-}
-
-export class Insertion {
-    // TODO change site from a string to a feature, allow ranges.
-    /**
-     *
-     * @param {(Feature|FeatureTree)} insertable
-     * @param {(string|null)} marker selection marker
-     */
-    constructor(insertion, marker = null) {
-        if(insertion instanceof Feature) {
-            insertion = new FeatureTree(insertion);
-        } else if(insertion instanceof Plasmid) {
-            marker = marker || insertion.marker;
-            insertion.marker |= marker;
+        if(before instanceof Array || (before !== null && !(before instanceof Plasmid))) {
+            before = new FeatureTree(before)
         }
 
-        this.contents = insertion;
-        this.marker = marker;
-    }
-}
-
-
-export class Replacement {
-    /**
-     * @param {(Feature|Phene)} site integration site
-     * @param {(Feature|FeatureTree)} insertion
-     * @param {(Feature|Phene)} marker
-     * @param {bool} multiple whether the site is for multiple integration
-     */
-    constructor(site, insertion, marker = null, multiple = false) {
-        if(insertion instanceof Feature) {
-            insertion = new FeatureTree(insertion);
-        } else if(insertion instanceof Plasmid) {
-            marker = marker || insertion.marker;
-            site = site || insertion.site;
-            insertion.marker |= marker;
-            insertion.site |= site;
+        if(after instanceof Array || (after !== null && !(after instanceof Plasmid))) {
+            after = new FeatureTree(after)
         }
 
-        this.contents = insertion;
-        this.site = site;
+        this.before = before;
+        this.after = after;
         this.marker = marker;
         this.multiple = multiple;
     }
-}
 
+    equals(other) {
+        return other instanceof Mutation &&
+            this.before == other.before &&
+            this.after == other.after &&
+            this.multiple == other.multiple;
+    }
+
+    static Ins(feature, ...args) {
+        return new Mutation(null, feature, ...args);
+    }
+
+    static Sub(before, after, ...args) {
+        return new Mutation(before, after, ...args);
+    }
+
+    static Del(feature, ...args) {
+        return new Mutation(feature, null, ...args);
+    }
+}
 
 export class FeatureTree {
     /**
@@ -97,26 +59,48 @@ export class FeatureTree {
             }
         }
     }
-}
 
-export class Group extends FeatureTree {
-    /**
-     *
-     * @param {...(Feature|Fusion)} contents
-     */
-    constructor(...contents) {
-        super(...contents);
-    }
-
-    // TODO compare all features from both groups.
     equals(other) {
-        return false;
+        if(!(other instanceof FeatureTree)) {
+            return false
+        }
+
+        if(this.contents.length != other.contents.length) {
+            return false
+        }
+
+        for(let i = 0; i < this.contents.length; i++) {
+            if(!this.contents[i].equals(other.contents[i])) {
+                return false
+            }
+        }
+
+        return true
     }
 
     match(other) {
-        return this.equals(other);
+        if(!(other instanceof FeatureTree)) {
+            return false
+        }
+
+        if(this.contents.length != other.contents.length) {
+            return false
+        }
+
+        for(let i = 0; i < this.contents.length; i++) {
+            if(!this.contents[i].match(other.contents[i])) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    [Symbol.iterator]() {
+        return this.contents[Symbol.iterator]()
     }
 }
+
 
 export class Plasmid extends FeatureTree {
 
@@ -137,31 +121,13 @@ export class Plasmid extends FeatureTree {
         }
     }
 
-    toInsertion() {
-        if(this.isIntegrated()) {
-            return new Replacement(this.site, this, this.marker);
-        } else {
-            throw `Plasmid(${this.name}) can't be converted to an insertion because it is not integrated.`;
-        }
-    }
-
-    isIntegrated() {
-        return this.site != null;
-    }
-
-    isEpisome() {
-        return this.site == null;
-    }
-
-    // TODO An integrated plasmid and an insertion are identical.
-
     equals(other) {
         if(this.name) {
             return this.name == other.name;
         } else if(other.name) {
             return false;
         } else { // no way to compare these plasmids except by comparing contents.
-            return this.contents.equals(other);
+            return super.equals(other);
         }
     }
 }
@@ -261,27 +227,31 @@ export class Feature {
         }
     }
 
-    match(other) {
+    match(other, matchVariant = true) {
+        if(!(other instanceof Feature)) {
+            return false
+        }
+
         if(this.accession && other.accession) {
             return this.accession.equals(other.accession);
         } else if(this.name) {
+            // only match features with the same name
             if(this.name != other.name) {
                 return false;
             }
 
-            //if(!this.organism != !other.organism || (this.organism && this.organism.name != other.organism.name)) {
-            //    return false
-            //}
+            // if an organism is specified, match only features with the same organism
+            if(this.organism && !this.organism.equals(other.organism)) {
+                return false
+            }
 
-            // a feature without a variant matches other features with a variant:
-            // this | other
-            // null | null -> true
-            // foo  | null -> false
-            // null | foo  -> true
-            // foo  | foo  -> true
-            // foo  | bar  -> false
-            console.log(this.name, '|', this.variant, other.variant, !this.variant || this.variant == other.variant)
-            return !this.variant || this.variant == other.variant;
+            // if this feature has no variant, match any other feature; otherwise, match only features with the same
+            // variant
+            if(!this.variant || !matchVariant) {
+                return true;
+            }
+
+            return this.variant == other.variant;
         } else {
             return false;
         }
@@ -357,8 +327,8 @@ export class Organism {
         this.aliases = aliases;
     }
 
-    matches(name) {
-
+    equals(other) {
+        return this.name == other.name;
     }
 
     get defaultAlias() {

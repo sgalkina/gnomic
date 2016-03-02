@@ -1,5 +1,10 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Organism = exports.Accession = exports.Range = exports.Phene = exports.Feature = exports.Fusion = exports.Plasmid = exports.FeatureTree = exports.Mutation = undefined;
+
 var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
@@ -8,9 +13,17 @@ var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstru
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
+var _get2 = require('babel-runtime/helpers/get');
+
+var _get3 = _interopRequireDefault(_get2);
+
 var _inherits2 = require('babel-runtime/helpers/inherits');
 
 var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _iterator2 = require('babel-runtime/core-js/symbol/iterator');
+
+var _iterator3 = _interopRequireDefault(_iterator2);
 
 var _regenerator = require('babel-runtime/regenerator');
 
@@ -20,102 +33,77 @@ var _getIterator2 = require('babel-runtime/core-js/get-iterator');
 
 var _getIterator3 = _interopRequireDefault(_getIterator2);
 
-var _createClass2 = require('babel-runtime/helpers/createClass');
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
 var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Organism = exports.Accession = exports.Range = exports.Phene = exports.Feature = exports.Fusion = exports.Plasmid = exports.Group = exports.FeatureTree = exports.Replacement = exports.Insertion = exports.Deletion = undefined;
+var _createClass2 = require('babel-runtime/helpers/createClass');
+
+var _createClass3 = _interopRequireDefault(_createClass2);
 
 var _grammar = require('./grammar.js');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * Created by lyschoening on 5/19/15.
- */
+var Mutation = exports.Mutation = function () {
+    function Mutation(before, after) {
+        var _ref = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
-// TODO ranges are not currently supported because they make the logic of computing a genotype radically more difficult
+        var _ref$marker = _ref.marker;
+        var marker = _ref$marker === undefined ? null : _ref$marker;
+        var _ref$multiple = _ref.multiple;
+        var multiple = _ref$multiple === undefined ? false : _ref$multiple;
+        (0, _classCallCheck3.default)(this, Mutation);
 
-var Deletion =
+        if (before instanceof Array || before !== null && !(before instanceof Plasmid)) {
+            before = new FeatureTree(before);
+        }
 
-/**
- *
- * e.g.
- *  -pExample()         (deletion of an episome)
- *  -abcD               (deletion of a feature)
- *  -abcD[c.12_34]      (deletion of part of a gene)
- *
- *
- * @param {(Feature|FeatureTree)} deletion delible
- * @param {(string|null)} marker selection marker
- *
- */
-exports.Deletion = function Deletion(deletion) {
-    var marker = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-    (0, _classCallCheck3.default)(this, Deletion);
+        if (after instanceof Array || after !== null && !(after instanceof Plasmid)) {
+            after = new FeatureTree(after);
+        }
 
-    if (deletion instanceof Feature) {
-        deletion = new FeatureTree(deletion);
-    }
-    this.contents = deletion;
-    this.marker = marker;
-};
-
-var Insertion =
-// TODO change site from a string to a feature, allow ranges.
-/**
- *
- * @param {(Feature|FeatureTree)} insertable
- * @param {(string|null)} marker selection marker
- */
-exports.Insertion = function Insertion(insertion) {
-    var marker = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-    (0, _classCallCheck3.default)(this, Insertion);
-
-    if (insertion instanceof Feature) {
-        insertion = new FeatureTree(insertion);
-    } else if (insertion instanceof Plasmid) {
-        marker = marker || insertion.marker;
-        insertion.marker |= marker;
+        this.before = before;
+        this.after = after;
+        this.marker = marker;
+        this.multiple = multiple;
     }
 
-    this.contents = insertion;
-    this.marker = marker;
-};
+    (0, _createClass3.default)(Mutation, [{
+        key: 'equals',
+        value: function equals(other) {
+            return other instanceof Mutation && this.before == other.before && this.after == other.after && this.multiple == other.multiple;
+        }
+    }], [{
+        key: 'Ins',
+        value: function Ins(feature) {
+            for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+                args[_key - 1] = arguments[_key];
+            }
 
-var Replacement =
-/**
- * @param {(Feature|Phene)} site integration site
- * @param {(Feature|FeatureTree)} insertion
- * @param {(Feature|Phene)} marker
- * @param {bool} multiple whether the site is for multiple integration
- */
-exports.Replacement = function Replacement(site, insertion) {
-    var marker = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
-    var multiple = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
-    (0, _classCallCheck3.default)(this, Replacement);
+            return new (Function.prototype.bind.apply(Mutation, [null].concat([null, feature], args)))();
+        }
+    }, {
+        key: 'Sub',
+        value: function Sub(before, after) {
+            for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+                args[_key2 - 2] = arguments[_key2];
+            }
 
-    if (insertion instanceof Feature) {
-        insertion = new FeatureTree(insertion);
-    } else if (insertion instanceof Plasmid) {
-        marker = marker || insertion.marker;
-        site = site || insertion.site;
-        insertion.marker |= marker;
-        insertion.site |= site;
-    }
+            return new (Function.prototype.bind.apply(Mutation, [null].concat([before, after], args)))();
+        }
+    }, {
+        key: 'Del',
+        value: function Del(feature) {
+            for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+                args[_key3 - 1] = arguments[_key3];
+            }
 
-    this.contents = insertion;
-    this.site = site;
-    this.marker = marker;
-    this.multiple = multiple;
-};
+            return new (Function.prototype.bind.apply(Mutation, [null].concat([feature, null], args)))();
+        }
+    }]);
+    return Mutation;
+}();
 
 var FeatureTree = exports.FeatureTree = function () {
     /**
@@ -126,8 +114,8 @@ var FeatureTree = exports.FeatureTree = function () {
     function FeatureTree() {
         (0, _classCallCheck3.default)(this, FeatureTree);
 
-        for (var _len = arguments.length, contents = Array(_len), _key = 0; _key < _len; _key++) {
-            contents[_key] = arguments[_key];
+        for (var _len4 = arguments.length, contents = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+            contents[_key4] = arguments[_key4];
         }
 
         this.contents = contents;
@@ -154,115 +142,124 @@ var FeatureTree = exports.FeatureTree = function () {
 
                         case 5:
                             if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                                _context.next = 16;
+                                _context.next = 17;
                                 break;
                             }
 
                             item = _step.value;
 
+                            console.log('item:', item, item instanceof FeatureTree);
+
                             if (!(item instanceof FeatureTree)) {
-                                _context.next = 11;
+                                _context.next = 12;
                                 break;
                             }
 
-                            return _context.delegateYield(item.features(), 't0', 9);
+                            return _context.delegateYield(item.features(), 't0', 10);
 
-                        case 9:
-                            _context.next = 13;
+                        case 10:
+                            _context.next = 14;
                             break;
 
-                        case 11:
-                            _context.next = 13;
+                        case 12:
+                            _context.next = 14;
                             return item;
 
-                        case 13:
+                        case 14:
                             _iteratorNormalCompletion = true;
                             _context.next = 5;
                             break;
 
-                        case 16:
-                            _context.next = 22;
+                        case 17:
+                            _context.next = 23;
                             break;
 
-                        case 18:
-                            _context.prev = 18;
+                        case 19:
+                            _context.prev = 19;
                             _context.t1 = _context['catch'](3);
                             _didIteratorError = true;
                             _iteratorError = _context.t1;
 
-                        case 22:
-                            _context.prev = 22;
+                        case 23:
                             _context.prev = 23;
+                            _context.prev = 24;
 
                             if (!_iteratorNormalCompletion && _iterator.return) {
                                 _iterator.return();
                             }
 
-                        case 25:
-                            _context.prev = 25;
+                        case 26:
+                            _context.prev = 26;
 
                             if (!_didIteratorError) {
-                                _context.next = 28;
+                                _context.next = 29;
                                 break;
                             }
 
                             throw _iteratorError;
 
-                        case 28:
-                            return _context.finish(25);
-
                         case 29:
-                            return _context.finish(22);
+                            return _context.finish(26);
 
                         case 30:
+                            return _context.finish(23);
+
+                        case 31:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, features, this, [[3, 18, 22, 30], [23,, 25, 29]]);
+            }, features, this, [[3, 19, 23, 31], [24,, 26, 30]]);
         })
-    }]);
-    return FeatureTree;
-}();
-
-var Group = exports.Group = function (_FeatureTree) {
-    (0, _inherits3.default)(Group, _FeatureTree);
-
-    /**
-     *
-     * @param {...(Feature|Fusion)} contents
-     */
-
-    function Group() {
-        var _Object$getPrototypeO;
-
-        (0, _classCallCheck3.default)(this, Group);
-
-        for (var _len2 = arguments.length, contents = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-            contents[_key2] = arguments[_key2];
-        }
-
-        return (0, _possibleConstructorReturn3.default)(this, (_Object$getPrototypeO = (0, _getPrototypeOf2.default)(Group)).call.apply(_Object$getPrototypeO, [this].concat(contents)));
-    }
-
-    // TODO compare all features from both groups.
-
-    (0, _createClass3.default)(Group, [{
+    }, {
         key: 'equals',
         value: function equals(other) {
-            return false;
+            if (!(other instanceof FeatureTree)) {
+                return false;
+            }
+
+            if (this.contents.length != other.contents.length) {
+                return false;
+            }
+
+            for (var i = 0; i < this.contents.length; i++) {
+                if (!this.contents[i].equals(other.contents[i])) {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }, {
         key: 'match',
         value: function match(other) {
-            return this.equals(other);
+            if (!(other instanceof FeatureTree)) {
+                return false;
+            }
+
+            if (this.contents.length != other.contents.length) {
+                return false;
+            }
+
+            for (var i = 0; i < this.contents.length; i++) {
+                if (!this.contents[i].match(other.contents[i])) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }, {
+        key: _iterator3.default,
+        value: function value() {
+            return (0, _getIterator3.default)(this.contents);
         }
     }]);
-    return Group;
-}(FeatureTree);
+    return FeatureTree;
+}();
 
-var Plasmid = exports.Plasmid = function (_FeatureTree2) {
-    (0, _inherits3.default)(Plasmid, _FeatureTree2);
+var Plasmid = exports.Plasmid = function (_FeatureTree) {
+    (0, _inherits3.default)(Plasmid, _FeatureTree);
 
     /**
      *
@@ -272,51 +269,29 @@ var Plasmid = exports.Plasmid = function (_FeatureTree2) {
      */
 
     function Plasmid(name) {
-        var _Object$getPrototypeO2;
+        var _Object$getPrototypeO;
 
         var site = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
         var marker = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
         (0, _classCallCheck3.default)(this, Plasmid);
 
-        for (var _len3 = arguments.length, contents = Array(_len3 > 3 ? _len3 - 3 : 0), _key3 = 3; _key3 < _len3; _key3++) {
-            contents[_key3 - 3] = arguments[_key3];
+        for (var _len5 = arguments.length, contents = Array(_len5 > 3 ? _len5 - 3 : 0), _key5 = 3; _key5 < _len5; _key5++) {
+            contents[_key5 - 3] = arguments[_key5];
         }
 
-        var _this2 = (0, _possibleConstructorReturn3.default)(this, (_Object$getPrototypeO2 = (0, _getPrototypeOf2.default)(Plasmid)).call.apply(_Object$getPrototypeO2, [this].concat(contents)));
+        var _this = (0, _possibleConstructorReturn3.default)(this, (_Object$getPrototypeO = (0, _getPrototypeOf2.default)(Plasmid)).call.apply(_Object$getPrototypeO, [this].concat(contents)));
 
-        _this2.name = name;
-        _this2.site = site;
-        _this2.marker = marker;
+        _this.name = name;
+        _this.site = site;
+        _this.marker = marker;
 
-        if (!(_this2.name || _this2.site)) {
+        if (!(_this.name || _this.site)) {
             throw 'An unintegrated plasmid MUST have a name.';
         }
-        return _this2;
+        return _this;
     }
 
     (0, _createClass3.default)(Plasmid, [{
-        key: 'toInsertion',
-        value: function toInsertion() {
-            if (this.isIntegrated()) {
-                return new Replacement(this.site, this, this.marker);
-            } else {
-                throw 'Plasmid(' + this.name + ') can\'t be converted to an insertion because it is not integrated.';
-            }
-        }
-    }, {
-        key: 'isIntegrated',
-        value: function isIntegrated() {
-            return this.site != null;
-        }
-    }, {
-        key: 'isEpisome',
-        value: function isEpisome() {
-            return this.site == null;
-        }
-
-        // TODO An integrated plasmid and an insertion are identical.
-
-    }, {
         key: 'equals',
         value: function equals(other) {
             if (this.name) {
@@ -325,15 +300,15 @@ var Plasmid = exports.Plasmid = function (_FeatureTree2) {
                 return false;
             } else {
                 // no way to compare these plasmids except by comparing contents.
-                return this.contents.equals(other);
+                return (0, _get3.default)((0, _getPrototypeOf2.default)(Plasmid.prototype), 'equals', this).call(this, other);
             }
         }
     }]);
     return Plasmid;
 }(FeatureTree);
 
-var Fusion = exports.Fusion = function (_FeatureTree3) {
-    (0, _inherits3.default)(Fusion, _FeatureTree3);
+var Fusion = exports.Fusion = function (_FeatureTree2) {
+    (0, _inherits3.default)(Fusion, _FeatureTree2);
 
     /**
      *
@@ -341,15 +316,15 @@ var Fusion = exports.Fusion = function (_FeatureTree3) {
      */
 
     function Fusion() {
-        var _Object$getPrototypeO3;
+        var _Object$getPrototypeO2;
 
         (0, _classCallCheck3.default)(this, Fusion);
 
-        for (var _len4 = arguments.length, features = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-            features[_key4] = arguments[_key4];
+        for (var _len6 = arguments.length, features = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+            features[_key6] = arguments[_key6];
         }
 
-        return (0, _possibleConstructorReturn3.default)(this, (_Object$getPrototypeO3 = (0, _getPrototypeOf2.default)(Fusion)).call.apply(_Object$getPrototypeO3, [this].concat(features)));
+        return (0, _possibleConstructorReturn3.default)(this, (_Object$getPrototypeO2 = (0, _getPrototypeOf2.default)(Fusion)).call.apply(_Object$getPrototypeO2, [this].concat(features)));
     }
 
     return Fusion;
@@ -370,18 +345,18 @@ var Feature = exports.Feature = function () {
     // TODO ranges are not yet supported upstream.
 
     function Feature(name) {
-        var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+        var _ref2 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-        var _ref$type = _ref.type;
-        var type = _ref$type === undefined ? null : _ref$type;
-        var _ref$accession = _ref.accession;
-        var accession = _ref$accession === undefined ? null : _ref$accession;
-        var _ref$organism = _ref.organism;
-        var organism = _ref$organism === undefined ? null : _ref$organism;
-        var _ref$variant = _ref.variant;
-        var variant = _ref$variant === undefined ? null : _ref$variant;
-        var _ref$range = _ref.range;
-        var range = _ref$range === undefined ? null : _ref$range;
+        var _ref2$type = _ref2.type;
+        var type = _ref2$type === undefined ? null : _ref2$type;
+        var _ref2$accession = _ref2.accession;
+        var accession = _ref2$accession === undefined ? null : _ref2$accession;
+        var _ref2$organism = _ref2.organism;
+        var organism = _ref2$organism === undefined ? null : _ref2$organism;
+        var _ref2$variant = _ref2.variant;
+        var variant = _ref2$variant === undefined ? null : _ref2$variant;
+        var _ref2$range = _ref2.range;
+        var range = _ref2$range === undefined ? null : _ref2$range;
         (0, _classCallCheck3.default)(this, Feature);
 
         this.name = name;
@@ -460,26 +435,32 @@ var Feature = exports.Feature = function () {
     }, {
         key: 'match',
         value: function match(other) {
+            var matchVariant = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+
+            if (!(other instanceof Feature)) {
+                return false;
+            }
+
             if (this.accession && other.accession) {
                 return this.accession.equals(other.accession);
             } else if (this.name) {
+                // only match features with the same name
                 if (this.name != other.name) {
                     return false;
                 }
 
-                //if(!this.organism != !other.organism || (this.organism && this.organism.name != other.organism.name)) {
-                //    return false
-                //}
+                // if an organism is specified, match only features with the same organism
+                if (this.organism && !this.organism.equals(other.organism)) {
+                    return false;
+                }
 
-                // a feature without a variant matches other features with a variant:
-                // this | other
-                // null | null -> true
-                // foo  | null -> false
-                // null | foo  -> true
-                // foo  | foo  -> true
-                // foo  | bar  -> false
-                console.log(this.name, '|', this.variant, other.variant, !this.variant || this.variant == other.variant);
-                return !this.variant || this.variant == other.variant;
+                // if this feature has no variant, match any other feature; otherwise, match only features with the same
+                // variant
+                if (!this.variant || !matchVariant) {
+                    return true;
+                }
+
+                return this.variant == other.variant;
             } else {
                 return false;
             }
@@ -499,12 +480,12 @@ var Phene = exports.Phene = function (_Feature) {
      */
 
     function Phene(name) {
-        var _ref2 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+        var _ref3 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-        var _ref2$organism = _ref2.organism;
-        var organism = _ref2$organism === undefined ? null : _ref2$organism;
-        var _ref2$variant = _ref2.variant;
-        var variant = _ref2$variant === undefined ? 'wild-type' : _ref2$variant;
+        var _ref3$organism = _ref3.organism;
+        var organism = _ref3$organism === undefined ? null : _ref3$organism;
+        var _ref3$variant = _ref3.variant;
+        var variant = _ref3$variant === undefined ? 'wild-type' : _ref3$variant;
         (0, _classCallCheck3.default)(this, Phene);
         return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Phene).call(this, name, { type: 'phene', organism: organism, variant: variant }));
     }
@@ -592,8 +573,10 @@ var Organism = exports.Organism = function () {
     }
 
     (0, _createClass3.default)(Organism, [{
-        key: 'matches',
-        value: function matches(name) {}
+        key: 'equals',
+        value: function equals(other) {
+            return this.name == other.name;
+        }
     }, {
         key: 'defaultAlias',
         get: function get() {

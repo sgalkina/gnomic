@@ -1,13 +1,13 @@
 "use strict";
 
-var _toConsumableArray2 = require("babel-runtime/helpers/toConsumableArray");
-
-var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.parse = exports.SyntaxError = undefined;
+
+var _toConsumableArray2 = require("babel-runtime/helpers/toConsumableArray");
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
 var _models = require("./models.js");
 
@@ -68,22 +68,22 @@ var _ref = function () {
         peg$c7 = { type: "literal", value: "+", description: "\"+\"" },
         peg$c8 = null,
         peg$c9 = function peg$c9(i, m) {
-      return new types.Insertion(i, m);
+      return new types.Mutation(null, i, { marker: m });
     },
         peg$c10 = ">",
         peg$c11 = { type: "literal", value: ">", description: "\">\"" },
         peg$c12 = function peg$c12(s, i, m) {
-      return new types.Replacement(s, i, m);
+      return new types.Mutation(s, i, { marker: m });
     },
         peg$c13 = ">>",
         peg$c14 = { type: "literal", value: ">>", description: "\">>\"" },
         peg$c15 = function peg$c15(s, i, m) {
-      return new types.Replacement(s, i, m, true);
+      return new types.Mutation(s, i, { marker: m, multiple: true });
     },
         peg$c16 = "-",
         peg$c17 = { type: "literal", value: "-", description: "\"-\"" },
         peg$c18 = function peg$c18(d, m) {
-      return new types.Deletion(d, m);
+      return new types.Mutation(d, null, { marker: m });
     },
         peg$c19 = function peg$c19(fs) {
       return new (Function.prototype.bind.apply(types.Group, [null].concat((0, _toConsumableArray3.default)(fs))))();

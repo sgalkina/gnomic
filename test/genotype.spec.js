@@ -1,124 +1,159 @@
-import {Feature, Phene, Plasmid, Insertion, Deletion, Replacement, Fusion, Group} from '../src/models.js';
+import {Feature, Phene, Plasmid, Mutation, Fusion, Group} from '../src/models.js';
 import {Genotype} from '../src/genotype.js';
 import {expect} from 'chai';
 
-describe('Genotypes', function() {
-    it('should work with one generation.', function() {
-        var gene2 = new Feature('gene2');
-        var gene3 = new Feature('gene3');
-        var gene1 = new Feature('gene1');
-        var marker1 = new Phene('marker1');
-        var site1 = new Feature('site1');
-        var gene4 = new Feature('gene4');
-        var marker2 = new Phene('marker2');
-        var promoter1 = new Feature('promoter1', 'promoter');
-        var plasmid1 = new Plasmid('plasmid1');
-        var site2 = new Feature('site2');
-        var marker3 = new Phene('marker3');
-        var gene5 = new Feature('gene5');
-        var plasmid2 = new Plasmid('plasmid2', null, marker3, gene5);
-        var g = new Genotype(null, [
-            new Insertion(new Fusion(promoter1, gene1)),
-            new Deletion(new Group(
-                gene2,
-                gene3
-            ), marker1),
-            new Replacement(
-                site1,
-                gene4,
-                marker2
-            ),
-            plasmid1,
-            new Replacement(site2, plasmid2)
-        ]);
+function chain(...definitions) {
+    let genotype = Genotype.parse(definitions.shift());
+    for (let definition of definitions) {
+        genotype = Genotype.parse(definition, {parent: genotype});
+    }
+    return genotype
+}
 
-        expect(g.addedFeatures).to.have.members([marker1, marker2, marker3, promoter1, gene1, gene4, gene5]); // TODO markers should be added too.
-        expect(g.removedFeatures).to.have.members([gene2, gene3, site1, site2]);
-        expect(g.addedEpisomes).to.have.members([plasmid1]);
-        expect(g.sites).to.have.members([site1, site2]);
-        expect(g.markers).to.have.members([marker1, marker2, marker3]);
+describe('Genotypes', function () {
+
+    it('should propagate added features.', function () {
+        let genotype = chain('+geneA', '+geneB');
+
+        expect(genotype.changes()).to.deep.have.members([
+            Mutation.Ins(new Feature('geneA')),
+            Mutation.Ins(new Feature('geneB'))
+        ])
     });
 
-    it('should work with phenotypes.', function() {
-        var g = new Genotype(null, [
-            new Phene('Phene', {variant: 'foo'})
-        ]);
+    it('should propagate removed features.', function () {
+        let genotype = chain('-geneA', '-geneB');
 
-        expect(g.addedFeatures).to.deep.have.members([new Phene('Phene', {variant: 'foo'})]);
+        expect(genotype.changes()).to.deep.have.members([
+            Mutation.Del(new Feature('geneA')),
+            Mutation.Del(new Feature('geneB'))
+        ])
     });
 
-    //it('should work with multiple generations.', function() {
-    //    var g1 = new Genotype(null, [
-    //        new Insertion(new Group(new Feature('gene1'), new Feature('gene2')))
-    //    ]);
-    //
-    //    expect(g1.addedFeatures).to.deep.have.members([new Feature('gene1'), new Feature('gene2')]);
-    //    expect(Array.from(g1.features())).to.deep.have.members([new Feature('gene1'), new Feature('gene2')]);
-    //
-    //    var g2 = new Genotype(g1, [
-    //        new Deletion(new Feature('gene1'))
-    //    ]);
-    //
-    //    expect(g2.removedFeatures).to.deep.have.members([new Feature('gene1')]);
-    //
-    //    expect(g2.addedFeatures).to.be.empty;
-    //    expect(Array.from(g2.features())).to.deep.have.members([new Feature('gene2')]);
-    //})
+    it('should integrate plasmid vectors.', function () {
+        expect(chain('siteA>pA{}').changes()).to.deep.have.members([
+            Mutation.Del(new Feature('siteA'))
+        ]);
 
-    //
-    //it('should handle deletion of a specific variant', function() {
-    //    var g1 = new Genotype(null, [
-    //        new Deletion(new Group(
-    //            new Feature('gene1', {variant: 'a'}),
-    //            new Feature('gene1', {variant: 'b'})))
-    //    ]);
-    //
-    //    expect(g1.removedFeatures).to.deep.have.members([
-    //        new Feature('gene1', {variant: 'a'}),
-    //        new Feature('gene1', {variant: 'b'})
-    //    ]);
-    //
-    //    var g2 = new Genotype(g1, [
-    //        new Insertion(new Feature('gene1', {variant: 'b'})),
-    //        new Deletion(new Feature('gene1', {variant: 'c'})),
-    //        new Insertion(new Feature('gene1', {variant: 'd'}))
-    //    ]);
-    //
-    //    expect(g2.removedFeatures).to.deep.have.members([
-    //        new Feature('gene1', {variant: 'c'})
-    //    ]);
-    //
-    //    expect(Array.from(g2.features(true))).to.deep.have.members([
-    //        new Feature('gene1', {variant: 'a'}),
-    //        new Feature('gene1', {variant: 'c'})
-    //    ]);
-    //
-    //    expect(g2.addedFeatures).to.deep.have.members([
-    //        new Feature('gene1', {variant: 'b'}),
-    //        new Feature('gene1', {variant: 'd'})
-    //    ]);
-    //
-    //    var g3ins = new Genotype(g2, [
-    //        new Insertion(new Feature('gene1'))
-    //    ]);
-    //
-    //    expect(g3ins.addedFeatures).to.deep.have.members([
-    //        new Feature('gene1')
-    //    ]);
-    //
-    //    console.log('ex', Array.from(g3ins.features()))
-    //    expect(Array.from(g3ins.features())).to.deep.have.members([
-    //        new Feature('gene1')
-    //    ]);
-    //
-    //    var g3del = new Genotype(g2, [
-    //        new Deletion(new Feature('gene1'))
-    //    ]);
-    //
-    //    expect(g3del.removedFeatures).to.deep.have.members([
-    //        new Feature('gene1')
-    //    ]);
-    //
-    //    expect(Array.from(g3del.features())).to.deep.have.members([]);
-    //})
+        expect(chain('siteA>pA{geneA geneB}').changes()).to.deep.have.members([
+            Mutation.Del(new Feature('siteA')),
+            Mutation.Ins(new Feature('geneA')),
+            Mutation.Ins(new Feature('geneB'))
+        ]);
+    });
+
+    it('should understand variants.', function () {
+        expect(chain('+geneA(x)', '-geneA').changes()).to.deep.have.members([
+            Mutation.Del(new Feature('geneA'))
+        ]);
+
+        expect(chain('+geneA', '-geneA(x)').changes()).to.deep.have.members([
+            Mutation.Ins(new Feature('geneA')),
+            Mutation.Del(new Feature('geneA', {variant: 'x'}))
+        ]);
+
+        expect(chain('-geneA(x)', '+geneA(y)').changes()).to.deep.have.members([
+            Mutation.Ins(new Feature('geneA', {variant: 'y'})),
+            Mutation.Del(new Feature('geneA', {variant: 'x'}))
+        ]);
+    });
+
+    it('should have phenotypes replace variants', function () {
+        // when variants are used (default case):
+        expect(chain('+geneA(x) +geneA(y)', '+geneA(z)').changes()).to.deep.have.members([
+            Mutation.Ins(new Feature('geneA', {variant: 'x'})),
+            Mutation.Ins(new Feature('geneA', {variant: 'y'})),
+            Mutation.Ins(new Feature('geneA', {variant: 'z'}))
+        ]);
+
+        // when phenotypes are used:
+        expect(chain('pheneA+', 'pheneA-').changes()).to.deep.have.members([
+            Mutation.Ins(new Phene('pheneA', {variant: 'mutant'}))
+        ]);
+
+        // when variants are mixed:
+        expect(chain('+geneA(x) +geneA(y)', 'geneA(z)').changes()).to.deep.have.members([
+            Mutation.Ins(new Phene('geneA', {variant: 'z'}))
+        ]);
+
+        expect(chain('+geneA(x) +geneA(y)', 'geneA(z)', '+geneA(x)').changes()).to.deep.have.members([
+            Mutation.Ins(new Feature('geneA', {variant: 'x'})),
+            Mutation.Ins(new Phene('geneA', {variant: 'z'}))
+        ]);
+    });
+
+    it('should treat markers as phenotypes', function () {
+        expect(chain('+geneA::pheneA+', 'pheneA-').changes()).to.deep.have.members([
+            Mutation.Ins(new Feature('geneA')),
+            Mutation.Ins(new Phene('pheneA', {variant: 'mutant'}))
+        ]);
+
+        expect(chain('+geneA::pheneA+', 'pheneA-', '-geneA::pheneA+').changes()).to.deep.have.members([
+            Mutation.Ins(new Phene('pheneA', {variant: 'wild-type'}))
+        ]);
+    });
+
+    it('should support multiple insertion', function () {
+        expect(chain('siteA>>geneA').raw).to.deep.have.members([
+            Mutation.Sub(new Feature('siteA'), new Feature('geneA'), {multiple: true})
+        ]);
+
+        expect(chain('siteA>geneA').raw).to.deep.have.members([
+            Mutation.Sub(new Feature('siteA'), new Feature('geneA'), {multiple: false})
+        ]);
+    });
+
+    it('should not mark features as removed if they were added previously', function () {
+        // geneA(x) is not marked as deleted as the removal was an exact match
+        expect(chain('+geneA(x) +geneB', '-geneA(x)').changes()).to.deep.have.members([
+            Mutation.Ins(new Feature('geneB'))
+        ]);
+
+        // geneA(x) is marked as deleted as it was not present before
+        expect(chain('+geneB', '-geneA(x)').changes()).to.deep.have.members([
+            Mutation.Ins(new Feature('geneB')),
+            Mutation.Del(new Feature('geneA', {variant: 'x'}))
+        ]);
+
+        // geneA is marked as deleted because the match was not exact
+        expect(chain('+geneA(x)', '-geneA').changes()).to.deep.have.members([
+            Mutation.Del(new Feature('geneA'))
+        ]);
+    });
+
+
+    it('should handle deletion of fusions with fusionStrategy=FUSION_MATCH_WHOLE (default)', function () {
+        expect(chain('+geneA:geneB +geneC', '-geneA').changes(true)).to.deep.have.members([
+            Mutation.Ins(new Fusion(new Feature('geneA'), new Feature('geneB'))),
+            Mutation.Ins(new Feature('geneC')),
+            Mutation.Del(new Feature('geneA'))
+        ]);
+
+        expect(chain('+geneA:geneB +geneC', '-geneC').changes(true)).to.deep.have.members([
+            Mutation.Ins(new Fusion(new Feature('geneA'), new Feature('geneB')))
+        ]);
+
+        expect(chain('+geneA:geneB +geneC', '-geneA:geneB').changes(true)).to.deep.have.members([
+            Mutation.Ins(new Feature('geneC'))
+        ]);
+
+        expect(chain('+geneA:geneB +geneC', '-geneA:geneB(x)').changes(true)).to.deep.have.members([
+            Mutation.Ins(new Fusion(new Feature('geneA'), new Feature('geneB'))),
+            Mutation.Del(new Fusion(new Feature('geneA'), new Feature('geneB', {variant: 'x'}))),
+            Mutation.Ins(new Feature('geneC'))
+        ]);
+    });
+
+    it('should handle fusions on integrated vectors', function () {
+        expect(chain('siteA>pA{geneA:geneB}').changes(false)).to.deep.have.members([
+            Mutation.Del(new Feature('siteA')),
+            Mutation.Ins(new Feature('geneA')),
+            Mutation.Ins(new Feature('geneB'))
+        ]);
+
+        expect(chain('siteA>pA{geneA:geneB}').changes(true)).to.deep.have.members([
+            Mutation.Del(new Feature('siteA')),
+            Mutation.Ins(new Fusion(new Feature('geneA'), new Feature('geneB')))
+        ]);
+    });
 });
