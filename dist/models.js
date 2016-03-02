@@ -142,74 +142,72 @@ var FeatureTree = exports.FeatureTree = function () {
 
                         case 5:
                             if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                                _context.next = 17;
+                                _context.next = 16;
                                 break;
                             }
 
                             item = _step.value;
 
-                            console.log('item:', item, item instanceof FeatureTree);
-
                             if (!(item instanceof FeatureTree)) {
-                                _context.next = 12;
+                                _context.next = 11;
                                 break;
                             }
 
-                            return _context.delegateYield(item.features(), 't0', 10);
+                            return _context.delegateYield(item.features(), 't0', 9);
 
-                        case 10:
-                            _context.next = 14;
+                        case 9:
+                            _context.next = 13;
                             break;
 
-                        case 12:
-                            _context.next = 14;
+                        case 11:
+                            _context.next = 13;
                             return item;
 
-                        case 14:
+                        case 13:
                             _iteratorNormalCompletion = true;
                             _context.next = 5;
                             break;
 
-                        case 17:
-                            _context.next = 23;
+                        case 16:
+                            _context.next = 22;
                             break;
 
-                        case 19:
-                            _context.prev = 19;
+                        case 18:
+                            _context.prev = 18;
                             _context.t1 = _context['catch'](3);
                             _didIteratorError = true;
                             _iteratorError = _context.t1;
 
-                        case 23:
+                        case 22:
+                            _context.prev = 22;
                             _context.prev = 23;
-                            _context.prev = 24;
 
                             if (!_iteratorNormalCompletion && _iterator.return) {
                                 _iterator.return();
                             }
 
-                        case 26:
-                            _context.prev = 26;
+                        case 25:
+                            _context.prev = 25;
 
                             if (!_didIteratorError) {
-                                _context.next = 29;
+                                _context.next = 28;
                                 break;
                             }
 
                             throw _iteratorError;
 
+                        case 28:
+                            return _context.finish(25);
+
                         case 29:
-                            return _context.finish(26);
+                            return _context.finish(22);
 
                         case 30:
-                            return _context.finish(23);
-
-                        case 31:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, features, this, [[3, 19, 23, 31], [24,, 26, 30]]);
+            }, features, this, [[3, 18, 22, 30], [23,, 25, 29]]);
         })
     }, {
         key: 'equals',

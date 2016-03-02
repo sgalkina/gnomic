@@ -25,7 +25,7 @@ deletion
 
 insertable
     = plasmid
-    / fs:feature_set { return new types.Group(...fs) }
+    / fs:feature_set { return fs }
     / fusion
     / feature
 

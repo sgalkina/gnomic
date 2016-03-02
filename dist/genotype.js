@@ -9,10 +9,6 @@ var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _stringify = require('babel-runtime/core-js/json/stringify');
-
-var _stringify2 = _interopRequireDefault(_stringify);
-
 var _from = require('babel-runtime/core-js/array/from');
 
 var _from2 = _interopRequireDefault(_from);
@@ -166,10 +162,6 @@ var Genotype = exports.Genotype = function () {
         var addedFusionFeatures = parent ? (0, _from2.default)(parent.addedFusionFeatures) : [];
         var removedFusionFeatures = parent ? (0, _from2.default)(parent.removedFusionFeatures) : [];
 
-        console.log('added:\n', (0, _stringify2.default)(addedFeatures, null, 4), '\n');
-        console.log('removed:\n', (0, _stringify2.default)(removedFeatures, null, 4), '\n');
-        console.log('changes:\n', (0, _stringify2.default)(changes, null, 4), '\n\n');
-
         var _iteratorNormalCompletion3 = true;
         var _didIteratorError3 = false;
         var _iteratorError3 = undefined;
@@ -258,10 +250,6 @@ var Genotype = exports.Genotype = function () {
                     }
 
                     if (change.after !== null) {
-
-                        console.log(change.after);
-                        console.log('change after features:\n', (0, _stringify2.default)((0, _from2.default)(change.after.features()), null, 4), '\n');
-
                         // insertion of one (or more) features or fusions
                         var _iteratorNormalCompletion6 = true;
                         var _didIteratorError6 = false;
@@ -326,9 +314,7 @@ var Genotype = exports.Genotype = function () {
                     if (change.marker !== null) {
                         // FIXME markers need to be updated also when regular features are updated.
                         upsert(markers, change.marker, false);
-                        //console.log('markerA', change.marker, addedFeatures)
                         upsert(addedFeatures, change.marker, false);
-                        //console.log('markerB', change.marker, addedFeatures)
                         remove(removedFeatures, change.marker, false);
                         upsert(addedFusionFeatures, change.marker, false);
                         remove(removedFusionFeatures, change.marker, false);
@@ -349,9 +335,6 @@ var Genotype = exports.Genotype = function () {
                 }
             }
         }
-
-        console.log('added features:', addedFeatures);
-        console.log('removed features:', removedFeatures);
 
         this.addedPlasmids = (0, _freeze2.default)(addedPlasmids);
         this.removedPlasmids = (0, _freeze2.default)(removedPlasmids);
@@ -374,362 +357,356 @@ var Genotype = exports.Genotype = function () {
                 while (1) {
                     switch (_context.prev = _context.next) {
                         case 0:
-                            console.log('XX FUSIONS', fusions);
-
                             if (!fusions) {
-                                _context.next = 57;
+                                _context.next = 55;
                                 break;
                             }
 
                             _iteratorNormalCompletion8 = true;
                             _didIteratorError8 = false;
                             _iteratorError8 = undefined;
-                            _context.prev = 5;
+                            _context.prev = 4;
                             _iterator8 = (0, _getIterator3.default)(this.addedFusionFeatures);
 
-                        case 7:
+                        case 6:
                             if (_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done) {
-                                _context.next = 15;
+                                _context.next = 13;
                                 break;
                             }
 
                             feature = _step8.value;
-
-                            console.log('\nfusions:', feature);
-                            _context.next = 12;
+                            _context.next = 10;
                             return _models.Mutation.Ins(feature);
 
-                        case 12:
+                        case 10:
                             _iteratorNormalCompletion8 = true;
-                            _context.next = 7;
+                            _context.next = 6;
+                            break;
+
+                        case 13:
+                            _context.next = 19;
                             break;
 
                         case 15:
-                            _context.next = 21;
-                            break;
-
-                        case 17:
-                            _context.prev = 17;
-                            _context.t0 = _context['catch'](5);
+                            _context.prev = 15;
+                            _context.t0 = _context['catch'](4);
                             _didIteratorError8 = true;
                             _iteratorError8 = _context.t0;
 
-                        case 21:
-                            _context.prev = 21;
-                            _context.prev = 22;
+                        case 19:
+                            _context.prev = 19;
+                            _context.prev = 20;
 
                             if (!_iteratorNormalCompletion8 && _iterator8.return) {
                                 _iterator8.return();
                             }
 
-                        case 24:
-                            _context.prev = 24;
+                        case 22:
+                            _context.prev = 22;
 
                             if (!_didIteratorError8) {
-                                _context.next = 27;
+                                _context.next = 25;
                                 break;
                             }
 
                             throw _iteratorError8;
 
+                        case 25:
+                            return _context.finish(22);
+
+                        case 26:
+                            return _context.finish(19);
+
                         case 27:
-                            return _context.finish(24);
-
-                        case 28:
-                            return _context.finish(21);
-
-                        case 29:
                             _iteratorNormalCompletion9 = true;
                             _didIteratorError9 = false;
                             _iteratorError9 = undefined;
-                            _context.prev = 32;
+                            _context.prev = 30;
                             _iterator9 = (0, _getIterator3.default)(this.removedFusionFeatures);
 
-                        case 34:
+                        case 32:
                             if (_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done) {
-                                _context.next = 41;
+                                _context.next = 39;
                                 break;
                             }
 
                             feature = _step9.value;
-                            _context.next = 38;
+                            _context.next = 36;
                             return _models.Mutation.Del(feature);
 
-                        case 38:
+                        case 36:
                             _iteratorNormalCompletion9 = true;
-                            _context.next = 34;
+                            _context.next = 32;
+                            break;
+
+                        case 39:
+                            _context.next = 45;
                             break;
 
                         case 41:
-                            _context.next = 47;
-                            break;
-
-                        case 43:
-                            _context.prev = 43;
-                            _context.t1 = _context['catch'](32);
+                            _context.prev = 41;
+                            _context.t1 = _context['catch'](30);
                             _didIteratorError9 = true;
                             _iteratorError9 = _context.t1;
 
-                        case 47:
-                            _context.prev = 47;
-                            _context.prev = 48;
+                        case 45:
+                            _context.prev = 45;
+                            _context.prev = 46;
 
                             if (!_iteratorNormalCompletion9 && _iterator9.return) {
                                 _iterator9.return();
                             }
 
-                        case 50:
-                            _context.prev = 50;
+                        case 48:
+                            _context.prev = 48;
 
                             if (!_didIteratorError9) {
-                                _context.next = 53;
+                                _context.next = 51;
                                 break;
                             }
 
                             throw _iteratorError9;
 
+                        case 51:
+                            return _context.finish(48);
+
+                        case 52:
+                            return _context.finish(45);
+
                         case 53:
-                            return _context.finish(50);
-
-                        case 54:
-                            return _context.finish(47);
-
-                        case 55:
-                            _context.next = 110;
+                            _context.next = 107;
                             break;
 
-                        case 57:
+                        case 55:
                             _iteratorNormalCompletion10 = true;
                             _didIteratorError10 = false;
                             _iteratorError10 = undefined;
-                            _context.prev = 60;
+                            _context.prev = 58;
                             _iterator10 = (0, _getIterator3.default)(this.addedFeatures);
 
-                        case 62:
+                        case 60:
                             if (_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done) {
-                                _context.next = 70;
+                                _context.next = 67;
                                 break;
                             }
 
                             feature = _step10.value;
-
-                            console.log('\nf:', feature);
-                            _context.next = 67;
+                            _context.next = 64;
                             return _models.Mutation.Ins(feature);
 
-                        case 67:
+                        case 64:
                             _iteratorNormalCompletion10 = true;
-                            _context.next = 62;
+                            _context.next = 60;
                             break;
 
-                        case 70:
-                            _context.next = 76;
+                        case 67:
+                            _context.next = 73;
                             break;
 
-                        case 72:
-                            _context.prev = 72;
-                            _context.t2 = _context['catch'](60);
+                        case 69:
+                            _context.prev = 69;
+                            _context.t2 = _context['catch'](58);
                             _didIteratorError10 = true;
                             _iteratorError10 = _context.t2;
 
-                        case 76:
-                            _context.prev = 76;
-                            _context.prev = 77;
+                        case 73:
+                            _context.prev = 73;
+                            _context.prev = 74;
 
                             if (!_iteratorNormalCompletion10 && _iterator10.return) {
                                 _iterator10.return();
                             }
 
-                        case 79:
-                            _context.prev = 79;
+                        case 76:
+                            _context.prev = 76;
 
                             if (!_didIteratorError10) {
-                                _context.next = 82;
+                                _context.next = 79;
                                 break;
                             }
 
                             throw _iteratorError10;
 
-                        case 82:
-                            return _context.finish(79);
-
-                        case 83:
+                        case 79:
                             return _context.finish(76);
 
-                        case 84:
+                        case 80:
+                            return _context.finish(73);
+
+                        case 81:
                             _iteratorNormalCompletion11 = true;
                             _didIteratorError11 = false;
                             _iteratorError11 = undefined;
-                            _context.prev = 87;
+                            _context.prev = 84;
                             _iterator11 = (0, _getIterator3.default)(this.removedFeatures);
 
-                        case 89:
+                        case 86:
                             if (_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done) {
-                                _context.next = 96;
+                                _context.next = 93;
                                 break;
                             }
 
                             feature = _step11.value;
-                            _context.next = 93;
+                            _context.next = 90;
                             return _models.Mutation.Del(feature);
 
-                        case 93:
+                        case 90:
                             _iteratorNormalCompletion11 = true;
-                            _context.next = 89;
+                            _context.next = 86;
                             break;
 
-                        case 96:
-                            _context.next = 102;
+                        case 93:
+                            _context.next = 99;
                             break;
 
-                        case 98:
-                            _context.prev = 98;
-                            _context.t3 = _context['catch'](87);
+                        case 95:
+                            _context.prev = 95;
+                            _context.t3 = _context['catch'](84);
                             _didIteratorError11 = true;
                             _iteratorError11 = _context.t3;
 
-                        case 102:
-                            _context.prev = 102;
-                            _context.prev = 103;
+                        case 99:
+                            _context.prev = 99;
+                            _context.prev = 100;
 
                             if (!_iteratorNormalCompletion11 && _iterator11.return) {
                                 _iterator11.return();
                             }
 
-                        case 105:
-                            _context.prev = 105;
+                        case 102:
+                            _context.prev = 102;
 
                             if (!_didIteratorError11) {
-                                _context.next = 108;
+                                _context.next = 105;
                                 break;
                             }
 
                             throw _iteratorError11;
 
-                        case 108:
-                            return _context.finish(105);
-
-                        case 109:
+                        case 105:
                             return _context.finish(102);
 
-                        case 110:
+                        case 106:
+                            return _context.finish(99);
+
+                        case 107:
                             _iteratorNormalCompletion12 = true;
                             _didIteratorError12 = false;
                             _iteratorError12 = undefined;
-                            _context.prev = 113;
+                            _context.prev = 110;
                             _iterator12 = (0, _getIterator3.default)(this.addedPlasmids);
 
-                        case 115:
+                        case 112:
                             if (_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done) {
-                                _context.next = 122;
+                                _context.next = 119;
                                 break;
                             }
 
                             plasmid = _step12.value;
-                            _context.next = 119;
+                            _context.next = 116;
                             return plasmid;
 
-                        case 119:
+                        case 116:
                             _iteratorNormalCompletion12 = true;
-                            _context.next = 115;
+                            _context.next = 112;
                             break;
 
-                        case 122:
-                            _context.next = 128;
+                        case 119:
+                            _context.next = 125;
                             break;
 
-                        case 124:
-                            _context.prev = 124;
-                            _context.t4 = _context['catch'](113);
+                        case 121:
+                            _context.prev = 121;
+                            _context.t4 = _context['catch'](110);
                             _didIteratorError12 = true;
                             _iteratorError12 = _context.t4;
 
-                        case 128:
-                            _context.prev = 128;
-                            _context.prev = 129;
+                        case 125:
+                            _context.prev = 125;
+                            _context.prev = 126;
 
                             if (!_iteratorNormalCompletion12 && _iterator12.return) {
                                 _iterator12.return();
                             }
 
-                        case 131:
-                            _context.prev = 131;
+                        case 128:
+                            _context.prev = 128;
 
                             if (!_didIteratorError12) {
-                                _context.next = 134;
+                                _context.next = 131;
                                 break;
                             }
 
                             throw _iteratorError12;
 
-                        case 134:
-                            return _context.finish(131);
-
-                        case 135:
+                        case 131:
                             return _context.finish(128);
 
-                        case 136:
+                        case 132:
+                            return _context.finish(125);
+
+                        case 133:
                             _iteratorNormalCompletion13 = true;
                             _didIteratorError13 = false;
                             _iteratorError13 = undefined;
-                            _context.prev = 139;
+                            _context.prev = 136;
                             _iterator13 = (0, _getIterator3.default)(this.removedPlasmids);
 
-                        case 141:
+                        case 138:
                             if (_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done) {
-                                _context.next = 148;
+                                _context.next = 145;
                                 break;
                             }
 
                             plasmid = _step13.value;
-                            _context.next = 145;
+                            _context.next = 142;
                             return _models.Mutation.Del(plasmid);
 
-                        case 145:
+                        case 142:
                             _iteratorNormalCompletion13 = true;
-                            _context.next = 141;
+                            _context.next = 138;
                             break;
 
-                        case 148:
-                            _context.next = 154;
+                        case 145:
+                            _context.next = 151;
                             break;
 
-                        case 150:
-                            _context.prev = 150;
-                            _context.t5 = _context['catch'](139);
+                        case 147:
+                            _context.prev = 147;
+                            _context.t5 = _context['catch'](136);
                             _didIteratorError13 = true;
                             _iteratorError13 = _context.t5;
 
-                        case 154:
-                            _context.prev = 154;
-                            _context.prev = 155;
+                        case 151:
+                            _context.prev = 151;
+                            _context.prev = 152;
 
                             if (!_iteratorNormalCompletion13 && _iterator13.return) {
                                 _iterator13.return();
                             }
 
-                        case 157:
-                            _context.prev = 157;
+                        case 154:
+                            _context.prev = 154;
 
                             if (!_didIteratorError13) {
-                                _context.next = 160;
+                                _context.next = 157;
                                 break;
                             }
 
                             throw _iteratorError13;
 
-                        case 160:
-                            return _context.finish(157);
-
-                        case 161:
+                        case 157:
                             return _context.finish(154);
 
-                        case 162:
+                        case 158:
+                            return _context.finish(151);
+
+                        case 159:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, iterChanges, this, [[5, 17, 21, 29], [22,, 24, 28], [32, 43, 47, 55], [48,, 50, 54], [60, 72, 76, 84], [77,, 79, 83], [87, 98, 102, 110], [103,, 105, 109], [113, 124, 128, 136], [129,, 131, 135], [139, 150, 154, 162], [155,, 157, 161]]);
+            }, iterChanges, this, [[4, 15, 19, 27], [20,, 22, 26], [30, 41, 45, 53], [46,, 48, 52], [58, 69, 73, 81], [74,, 76, 80], [84, 95, 99, 107], [100,, 102, 106], [110, 121, 125, 133], [126,, 128, 132], [136, 147, 151, 159], [152,, 154, 158]]);
         })
     }, {
         key: 'changes',
