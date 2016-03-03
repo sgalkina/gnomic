@@ -110,7 +110,7 @@ export class Plasmid extends FeatureTree {
      * @param {(string|null)} marker selection marker (carried over from insertion).
      * @param {...(Phene|Feature|Fusion)} contents
      */
-    constructor(name, site=null, marker=null, ...contents) {
+    constructor(name, {site = null, marker = null} = {}, ...contents) {
         super(...contents);
         this.name = name;
         this.site = site;

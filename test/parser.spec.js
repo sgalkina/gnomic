@@ -40,7 +40,7 @@ describe('Language parser', function() {
         ]);
 
         expect(parse('-xyz{abc}')).to.deep.equal([
-            Mutation.Del(new Plasmid('xyz', null, null, new Feature('abc')))
+            Mutation.Del(new Plasmid('xyz', {}, new Feature('abc')))
         ]);
     });
 
@@ -70,11 +70,11 @@ describe('Language parser', function() {
 
     it('should handle advanced plasmid deletions', function() {
         expect(parse('-xyz{abc, xyz}')).to.deep.equal([
-            Mutation.Del(new Plasmid('xyz', null, null, new Feature('abc'), new Feature('xyz')))
+            Mutation.Del(new Plasmid('xyz', {}, new Feature('abc'), new Feature('xyz')))
         ]);
 
         expect(parse('-xyz{a:b:c}')).to.deep.equal([
-            Mutation.Del(new Plasmid('xyz', null, null,
+            Mutation.Del(new Plasmid('xyz', {},
                 new Fusion(
                     new Feature('a'), // {type: 'promoter'}
                     new Feature('b'),
@@ -120,10 +120,7 @@ describe('Language parser', function() {
         expect(parse('#123>p123{x A+ B+}::C(custom)')).to.deep.equal([
             Mutation.Sub(
                 new Feature(null, {accession: new Accession(123)}),
-                new Plasmid(
-                    'p123',
-                    null,
-                    null,
+                new Plasmid('p123', {},
                     new Feature('x'),
                     new Feature('A', {variant: 'wild-type'}),
                     new Feature('B', {variant: 'wild-type'})),
@@ -162,24 +159,14 @@ describe('Language parser', function() {
 
         expect(parse('+p123{b c}::Marker+')).to.deep.equal([
             Mutation.Ins(
-                new Plasmid(
-                    'p123',
-                    null,
-                    null,
-                    new Feature('b'),
-                    new Feature('c')),
+                new Plasmid( 'p123', {}, new Feature('b'), new Feature('c')),
                 {marker: new Phene('Marker')})
         ]);
 
         expect(parse('s>p123{b c}::Marker+')).to.deep.equal([
             Mutation.Sub(
                 new Feature('s'),
-                new Plasmid(
-                    'p123',
-                    null,
-                    null,
-                    new Feature('b'),
-                    new Feature('c')),
+                new Plasmid('p123', {}, new Feature('b'), new Feature('c')),
                 {marker: new Phene('Marker')})
         ]);
     });
@@ -206,8 +193,8 @@ describe('Language parser', function() {
 
     it('should allow an episome with a selection marker', function() {
         expect(parse('p1{}::m+ p2{a}::m(R)')).to.deep.equal([
-            new Plasmid('p1', null, new Phene('m')),
-            new Plasmid('p2', null, new Phene('m', {variant: 'R'}), new Feature('a'))
+            new Plasmid('p1', {marker: new Phene('m')}),
+            new Plasmid('p2', {marker: new Phene('m', {variant: 'R'})}, new Feature('a'))
         ]);
     });
 

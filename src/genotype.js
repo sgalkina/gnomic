@@ -69,7 +69,7 @@ export class Genotype {
             // addition of an un-integrated plasmid
             if(change instanceof Plasmid) {
                 upsert(addedPlasmids, change);
-                removeOrExclude(removedPlasmids, change);
+                remove(removedPlasmids, change);
             } else if(change instanceof Feature) {
                 upsert(addedFeatures, change, false);
                 remove(removedFeatures, change, false);
@@ -81,8 +81,7 @@ export class Genotype {
 
                 // deletion of a plasmid; change.after MUST be null
                 if (change.before instanceof Plasmid) {
-                    remove(addedPlasmids, change.before);
-                    upsert(removedPlasmids, change.before);
+                    removeOrExclude(addedPlasmids, removedPlasmids, change.before);
                 } else if(change.before !== null) {
                     // deletion of one (or more) features or fusions
                     for(let feature of change.before.features()) {

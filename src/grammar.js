@@ -55,7 +55,7 @@ export const {SyntaxError, parse} = (function() {
         peg$c18 = function(d, m) { return new types.Mutation(d, null, {marker: m}) },
         peg$c19 = function(fs) { return fs },
         peg$c20 = function(p, m) { p.marker = m; return p },
-        peg$c21 = function(name, fs) { return new types.Plasmid(name, null, null, ...fs) },
+        peg$c21 = function(name, fs) { return new types.Plasmid(name, {}, ...fs) },
         peg$c22 = "{}",
         peg$c23 = { type: "literal", value: "{}", description: "\"{}\"" },
         peg$c24 = function(name) { return new types.Plasmid(name) },

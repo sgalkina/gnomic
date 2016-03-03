@@ -33,7 +33,7 @@ episome
     = p:plasmid m:marker? { p.marker = m; return p }
 
 plasmid
-    = name:identifier fs:feature_set { return new types.Plasmid(name, null, null, ...fs) }
+    = name:identifier fs:feature_set { return new types.Plasmid(name, {}, ...fs) }
     / name:identifier "{}" { return new types.Plasmid(name) }
 
 marker = "::" m:phene { return m }

@@ -173,7 +173,7 @@ var Genotype = exports.Genotype = function () {
                 // addition of an un-integrated plasmid
                 if (change instanceof _models.Plasmid) {
                     upsert(addedPlasmids, change);
-                    removeOrExclude(removedPlasmids, change);
+                    remove(removedPlasmids, change);
                 } else if (change instanceof _models.Feature) {
                     upsert(addedFeatures, change, false);
                     remove(removedFeatures, change, false);
@@ -185,8 +185,7 @@ var Genotype = exports.Genotype = function () {
 
                     // deletion of a plasmid; change.after MUST be null
                     if (change.before instanceof _models.Plasmid) {
-                        remove(addedPlasmids, change.before);
-                        upsert(removedPlasmids, change.before);
+                        removeOrExclude(addedPlasmids, removedPlasmids, change.before);
                     } else if (change.before !== null) {
                         // deletion of one (or more) features or fusions
                         var _iteratorNormalCompletion4 = true;

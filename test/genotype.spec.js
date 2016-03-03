@@ -1,4 +1,4 @@
-import {Feature, Phene, Plasmid, Mutation, Fusion, Group} from '../src/models.js';
+import {Feature, Phene, Plasmid, Mutation, Fusion, Organism} from '../src/models.js';
 import {Genotype} from '../src/genotype.js';
 import {expect} from 'chai';
 
@@ -156,4 +156,18 @@ describe('Genotypes', function () {
             Mutation.Ins(new Fusion(new Feature('geneA'), new Feature('geneB')))
         ]);
     });
+
+
+    it('should handle a complex plasmid insertion', function () {
+        // TODO Type hints (e.g. p.promoterA, p.promoterB.
+        expect(chain('plasmidX{promoterA:orgA/geneA promoterB:orgB/geneB geneC}::markerY+').changes(true)).to.deep.have.members([
+            new Plasmid('plasmidX', {marker: new Phene('markerY', {variant: 'wild-type'})},
+                new Fusion(new Feature('promoterA'), new Feature('geneA', {organism: new Organism('orgA')})),
+                new Fusion(new Feature('promoterB'), new Feature('geneB', {organism: new Organism('orgB')})),
+                new Feature('geneC')
+            )
+        ]);
+
+    });
+
 });
