@@ -269,12 +269,16 @@ var Plasmid = exports.Plasmid = function (_FeatureTree) {
     function Plasmid(name) {
         var _Object$getPrototypeO;
 
-        var site = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-        var marker = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+        var _ref2 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+        var _ref2$site = _ref2.site;
+        var site = _ref2$site === undefined ? null : _ref2$site;
+        var _ref2$marker = _ref2.marker;
+        var marker = _ref2$marker === undefined ? null : _ref2$marker;
         (0, _classCallCheck3.default)(this, Plasmid);
 
-        for (var _len5 = arguments.length, contents = Array(_len5 > 3 ? _len5 - 3 : 0), _key5 = 3; _key5 < _len5; _key5++) {
-            contents[_key5 - 3] = arguments[_key5];
+        for (var _len5 = arguments.length, contents = Array(_len5 > 2 ? _len5 - 2 : 0), _key5 = 2; _key5 < _len5; _key5++) {
+            contents[_key5 - 2] = arguments[_key5];
         }
 
         var _this = (0, _possibleConstructorReturn3.default)(this, (_Object$getPrototypeO = (0, _getPrototypeOf2.default)(Plasmid)).call.apply(_Object$getPrototypeO, [this].concat(contents)));
@@ -343,18 +347,18 @@ var Feature = exports.Feature = function () {
     // TODO ranges are not yet supported upstream.
 
     function Feature(name) {
-        var _ref2 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+        var _ref3 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-        var _ref2$type = _ref2.type;
-        var type = _ref2$type === undefined ? null : _ref2$type;
-        var _ref2$accession = _ref2.accession;
-        var accession = _ref2$accession === undefined ? null : _ref2$accession;
-        var _ref2$organism = _ref2.organism;
-        var organism = _ref2$organism === undefined ? null : _ref2$organism;
-        var _ref2$variant = _ref2.variant;
-        var variant = _ref2$variant === undefined ? null : _ref2$variant;
-        var _ref2$range = _ref2.range;
-        var range = _ref2$range === undefined ? null : _ref2$range;
+        var _ref3$type = _ref3.type;
+        var type = _ref3$type === undefined ? null : _ref3$type;
+        var _ref3$accession = _ref3.accession;
+        var accession = _ref3$accession === undefined ? null : _ref3$accession;
+        var _ref3$organism = _ref3.organism;
+        var organism = _ref3$organism === undefined ? null : _ref3$organism;
+        var _ref3$variant = _ref3.variant;
+        var variant = _ref3$variant === undefined ? null : _ref3$variant;
+        var _ref3$range = _ref3.range;
+        var range = _ref3$range === undefined ? null : _ref3$range;
         (0, _classCallCheck3.default)(this, Feature);
 
         this.name = name;
@@ -478,12 +482,12 @@ var Phene = exports.Phene = function (_Feature) {
      */
 
     function Phene(name) {
-        var _ref3 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+        var _ref4 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-        var _ref3$organism = _ref3.organism;
-        var organism = _ref3$organism === undefined ? null : _ref3$organism;
-        var _ref3$variant = _ref3.variant;
-        var variant = _ref3$variant === undefined ? 'wild-type' : _ref3$variant;
+        var _ref4$organism = _ref4.organism;
+        var organism = _ref4$organism === undefined ? null : _ref4$organism;
+        var _ref4$variant = _ref4.variant;
+        var variant = _ref4$variant === undefined ? 'wild-type' : _ref4$variant;
         (0, _classCallCheck3.default)(this, Phene);
         return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Phene).call(this, name, { type: 'phene', organism: organism, variant: variant }));
     }
@@ -508,16 +512,16 @@ var Range = exports.Range = function () {
      *
      * @param {int} start
      * @param {int} end
-     * @param {string} sequence one of 'coding' and 'protein'
+     * @param {string} level one of 'coding' and 'protein'
      */
 
     function Range(start, end) {
-        var sequence = arguments.length <= 2 || arguments[2] === undefined ? 'coding' : arguments[2];
+        var level = arguments.length <= 2 || arguments[2] === undefined ? 'coding' : arguments[2];
         (0, _classCallCheck3.default)(this, Range);
 
         this.start = start;
         this.end = end;
-        this.sequence = sequence;
+        this.level = level;
     }
 
     (0, _createClass3.default)(Range, [{
@@ -529,9 +533,9 @@ var Range = exports.Range = function () {
         key: 'toString',
         value: function toString() {
             if (this.isPoint()) {
-                return '[' + this.sequence.charAt(0) + '.' + this.start + ']';
+                return '[' + this.level.charAt(0) + '.' + this.start + ']';
             } else {
-                return '[' + this.sequence.charAt(0) + '.' + this.start + '_' + this.end + ']';
+                return '[' + this.level.charAt(0) + '.' + this.start + '_' + this.end + ']';
             }
         }
     }]);

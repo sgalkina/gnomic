@@ -283,12 +283,12 @@ export class Range {
      *
      * @param {int} start
      * @param {int} end
-     * @param {string} sequence one of 'coding' and 'protein'
+     * @param {string} level one of 'coding' and 'protein'
      */
-    constructor(start, end, sequence='coding') {
+    constructor(start, end, level='coding') {
         this.start = start;
         this.end = end;
-        this.sequence = sequence;
+        this.level = level;
     }
 
     isPoint() {
@@ -297,9 +297,9 @@ export class Range {
 
     toString() {
         if(this.isPoint()) {
-            return `[${this.sequence.charAt(0)}.${this.start}]`
+            return `[${this.level.charAt(0)}.${this.start}]`
         } else {
-            return `[${this.sequence.charAt(0)}.${this.start}_${this.end}]`
+            return `[${this.level.charAt(0)}.${this.start}_${this.end}]`
         }
     }
 }

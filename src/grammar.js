@@ -106,8 +106,8 @@ export const {SyntaxError, parse} = (function() {
         peg$c59 = { type: "literal", value: "_", description: "\"_\"" },
         peg$c60 = "]",
         peg$c61 = { type: "literal", value: "]", description: "\"]\"" },
-        peg$c62 = function(type, start, end) { return {type: type || 'coding', start: start, end: end} },
-        peg$c63 = function(type, pos) { return {type: type || 'coding', start: pos, end: pos} },
+        peg$c62 = function(level, start, end) { return new types.Range(start, end, level || 'coding') },
+        peg$c63 = function(level, pos) { return new types.Range(pos, pos, level || 'coding') },
         peg$c64 = /^[cp]/,
         peg$c65 = { type: "class", value: "[cp]", description: "[cp]" },
         peg$c66 = ".",
@@ -1325,7 +1325,7 @@ export const {SyntaxError, parse} = (function() {
         if (peg$silentFails === 0) { peg$fail(peg$c57); }
       }
       if (s1 !== peg$FAILED) {
-        s2 = peg$parserange_sequence_type();
+        s2 = peg$parserange_sequence_level();
         if (s2 === peg$FAILED) {
           s2 = peg$c8;
         }
@@ -1387,7 +1387,7 @@ export const {SyntaxError, parse} = (function() {
           if (peg$silentFails === 0) { peg$fail(peg$c57); }
         }
         if (s1 !== peg$FAILED) {
-          s2 = peg$parserange_sequence_type();
+          s2 = peg$parserange_sequence_level();
           if (s2 === peg$FAILED) {
             s2 = peg$c8;
           }
@@ -1426,7 +1426,7 @@ export const {SyntaxError, parse} = (function() {
       return s0;
     }
 
-    function peg$parserange_sequence_type() {
+    function peg$parserange_sequence_level() {
       var s0, s1, s2;
 
       s0 = peg$currPos;

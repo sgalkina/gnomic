@@ -92,7 +92,7 @@ var _ref = function () {
       p.marker = m;return p;
     },
         peg$c21 = function peg$c21(name, fs) {
-      return new (Function.prototype.bind.apply(types.Plasmid, [null].concat([name, null, null], (0, _toConsumableArray3.default)(fs))))();
+      return new (Function.prototype.bind.apply(types.Plasmid, [null].concat([name, {}], (0, _toConsumableArray3.default)(fs))))();
     },
         peg$c22 = "{}",
         peg$c23 = { type: "literal", value: "{}", description: "\"{}\"" },
@@ -170,11 +170,11 @@ var _ref = function () {
         peg$c59 = { type: "literal", value: "_", description: "\"_\"" },
         peg$c60 = "]",
         peg$c61 = { type: "literal", value: "]", description: "\"]\"" },
-        peg$c62 = function peg$c62(type, start, end) {
-      return { type: type || 'coding', start: start, end: end };
+        peg$c62 = function peg$c62(level, start, end) {
+      return new types.Range(start, end, level || 'coding');
     },
-        peg$c63 = function peg$c63(type, pos) {
-      return { type: type || 'coding', start: pos, end: pos };
+        peg$c63 = function peg$c63(level, pos) {
+      return new types.Range(pos, pos, level || 'coding');
     },
         peg$c64 = /^[cp]/,
         peg$c65 = { type: "class", value: "[cp]", description: "[cp]" },
@@ -1429,7 +1429,7 @@ var _ref = function () {
         }
       }
       if (s1 !== peg$FAILED) {
-        s2 = peg$parserange_sequence_type();
+        s2 = peg$parserange_sequence_level();
         if (s2 === peg$FAILED) {
           s2 = peg$c8;
         }
@@ -1497,7 +1497,7 @@ var _ref = function () {
           }
         }
         if (s1 !== peg$FAILED) {
-          s2 = peg$parserange_sequence_type();
+          s2 = peg$parserange_sequence_level();
           if (s2 === peg$FAILED) {
             s2 = peg$c8;
           }
@@ -1538,7 +1538,7 @@ var _ref = function () {
       return s0;
     }
 
-    function peg$parserange_sequence_type() {
+    function peg$parserange_sequence_level() {
       var s0, s1, s2;
 
       s0 = peg$currPos;

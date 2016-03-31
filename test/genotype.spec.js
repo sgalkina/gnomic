@@ -1,4 +1,4 @@
-import {Feature, Phene, Plasmid, Mutation, Fusion, Organism} from '../src/models.js';
+import {Feature, Phene, Plasmid, Mutation, Fusion, Organism, Range} from '../src/models.js';
 import {Genotype} from '../src/genotype.js';
 import {expect} from 'chai';
 
@@ -100,6 +100,27 @@ describe('Genotypes', function () {
 
         expect(chain('siteA>geneA').raw).to.deep.have.members([
             Mutation.Sub(new Feature('siteA'), new Feature('geneA'), {multiple: false})
+        ]);
+    });
+
+    it('should handle basic ranges.', function () {
+        // TODO in the current implementation, only the most recently deleted range for a feature is accounted for.
+        // TODO detailed tracking of different bits & pieces of features.
+
+        expect(chain('-geneA[c.10_15]').changes()).to.deep.have.members([
+            Mutation.Del(new Feature('geneA', {range: new Range(10, 15, 'coding')}))
+        ]);
+
+        expect(chain('-geneA[p.5]').changes()).to.deep.have.members([
+            Mutation.Del(new Feature('geneA', {range: new Range(5, 5, 'protein')}))
+        ]);
+
+        expect(chain('-geneA[p.5]', '+geneA').changes()).to.deep.have.members([
+            Mutation.Ins(new Feature('geneA'))
+        ]);
+
+        expect(chain('-geneA[p.5]', '-geneA').changes()).to.deep.have.members([
+            Mutation.Del(new Feature('geneA'))
         ]);
     });
 

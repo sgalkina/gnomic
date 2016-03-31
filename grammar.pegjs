@@ -80,10 +80,10 @@ binary_variant
     = "+" { return 'wild-type' }
     / "-" { return 'mutant' }
 
-range = "[" type:range_sequence_type? start:integer "_" end:integer "]" { return {type: type || 'coding', start: start, end: end} }
-      / "[" type:range_sequence_type? pos:integer "]" { return {type: type || 'coding', start: pos, end: pos} }
+range = "[" level:range_sequence_level? start:integer "_" end:integer "]" { return new types.Range(start, end, level || 'coding') }
+      / "[" level:range_sequence_level? pos:integer "]" { return new types.Range(pos, pos, level || 'coding') }
 
-range_sequence_type = (type:$([cp]) ".") { return {c: 'coding', p: 'protein'}[type] }
+range_sequence_level = (type:$([cp]) ".") { return {c: 'coding', p: 'protein'}[type] }
 
 accession
     = "#" db:database ":" id:(integer/identifier) { return new types.Accession(id, db); }
