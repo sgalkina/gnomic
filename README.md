@@ -39,6 +39,7 @@ nucleotide range of a `feature` | ``feature[startBase_endBase]``
 coding nucleotide range of a `gene` | ``gene[c.startBase_endBase]``
 protein amino-acid range of a `gene` | ``gene[p.startAA_endAA]``
 protein amino-acid of a `gene` | ``gene[p.AA]``
+`feature` of type promoter | ``promoter.promoterName``
 
 ### Term definitions
 
@@ -62,9 +63,10 @@ Term           | Description
 | `+abcD::His5+` | insertion of feature 'abcD' using the 'His5' selection marker |
 | `efgH>abcD` | insertion of feature 'abcD' at the location of 'efgH', substituting (deleting) 'efgH' |
 | `+efgH::abcD` | insertion of feature 'abcD' at the location of 'efgH' |
-| `abcD(cr)` | insertion of gene 'abcD' with 'cr' (i.e. cold-resistant) mutation |
-| `Pmtr:abcD:Trmt` | insertion of the fusion of features 'Pmtr', 'abcD', 'Trmt' with implied types of 'promotor', 'gene' and 'terminator' |
-| `abcD:efgH:His5+` | insertion of genes 'abcD' and 'efgH' next to each other using the 'His5' selection marker |
+| `abcD(cr)` | presence of gene 'abcD' with 'cr' (i.e. cold-resistant) mutation |
+| `+Pmtr:abcD:Trmt` | insertion of the fusion of features 'Pmtr', 'abcD', 'Trmt'
+| `+promoter.Pmtr:abcD:terminator.Trmt` | insertion of the fusion of features 'Pmtr', 'abcD', 'Trmt' with explicit types
+| `+abcD:efgH:His5+` | insertion of genes 'abcD' and 'efgH' next to each other using the 'His5' selection marker |
 | `Abc+` | Abc wild-type phenotype |
 | `Abc-` | Abc mutant phenotype |
 | `p123{}` | Plasmid `p123` present |
