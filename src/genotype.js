@@ -104,14 +104,12 @@ export class Genotype {
                 if(change.after !== null) {
                     // insertion of one (or more) features or fusions
                     for(let feature of change.after.features()) {
-                        upsert(addedFeatures, feature);
-                        remove(removedFeatures, feature);
+                        removeOrExclude(removedFeatures, addedFeatures, feature);
                     }
 
                     // fusion-sensitive implementation:
                     for (let featureOrFusion of change.after) {
-                        upsert(addedFusionFeatures, featureOrFusion);
-                        remove(removedFusionFeatures, featureOrFusion);
+                        removeOrExclude(removedFusionFeatures, addedFusionFeatures, featureOrFusion);
                     }
                 }
 
