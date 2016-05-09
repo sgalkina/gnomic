@@ -258,8 +258,7 @@ var Genotype = exports.Genotype = function () {
                             for (var _iterator6 = (0, _getIterator3.default)(change.after.features()), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
                                 var feature = _step6.value;
 
-                                upsert(addedFeatures, feature);
-                                remove(removedFeatures, feature);
+                                removeOrExclude(removedFeatures, addedFeatures, feature);
                             }
 
                             // fusion-sensitive implementation:
@@ -286,8 +285,7 @@ var Genotype = exports.Genotype = function () {
                             for (var _iterator7 = (0, _getIterator3.default)(change.after), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
                                 var featureOrFusion = _step7.value;
 
-                                upsert(addedFusionFeatures, featureOrFusion);
-                                remove(removedFusionFeatures, featureOrFusion);
+                                removeOrExclude(removedFusionFeatures, addedFusionFeatures, featureOrFusion);
                             }
                         } catch (err) {
                             _didIteratorError7 = true;
