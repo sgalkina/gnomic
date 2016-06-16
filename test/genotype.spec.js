@@ -210,4 +210,14 @@ describe('Genotypes', function () {
 
     });
 
+    it('should work with feature sets', function () {
+        expect(chain('A>{B:C}::D+').changes(false)).to.deep.have.members([
+            Mutation.Del(new Feature('A')),
+            Mutation.Ins(new Feature('B')),
+            Mutation.Ins(new Feature('C')),
+            Mutation.Ins(new Phene('D'))
+        ]);
+    });
+
+
 });

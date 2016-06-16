@@ -4,11 +4,15 @@ import {parse} from './grammar.js';
 export class Mutation {
     constructor(before, after, {marker=null, multiple=false} = {}) {
 
-        if(before instanceof Array || (before !== null && !(before instanceof Plasmid))) {
+        if (before instanceof Array) {
+            before = new FeatureTree(...before)
+        } else if (before !== null && !(before instanceof Plasmid)) {
             before = new FeatureTree(before)
         }
 
-        if(after instanceof Array || (after !== null && !(after instanceof Plasmid))) {
+        if (after instanceof Array) {
+            after = new FeatureTree(...after)
+        } else if (after !== null && !(after instanceof Plasmid)) {
             after = new FeatureTree(after)
         }
 

@@ -33,6 +33,10 @@ var _getIterator2 = require('babel-runtime/core-js/get-iterator');
 
 var _getIterator3 = _interopRequireDefault(_getIterator2);
 
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
 var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
@@ -55,11 +59,15 @@ var Mutation = exports.Mutation = function () {
         var multiple = _ref$multiple === undefined ? false : _ref$multiple;
         (0, _classCallCheck3.default)(this, Mutation);
 
-        if (before instanceof Array || before !== null && !(before instanceof Plasmid)) {
+        if (before instanceof Array) {
+            before = new (Function.prototype.bind.apply(FeatureTree, [null].concat((0, _toConsumableArray3.default)(before))))();
+        } else if (before !== null && !(before instanceof Plasmid)) {
             before = new FeatureTree(before);
         }
 
-        if (after instanceof Array || after !== null && !(after instanceof Plasmid)) {
+        if (after instanceof Array) {
+            after = new (Function.prototype.bind.apply(FeatureTree, [null].concat((0, _toConsumableArray3.default)(after))))();
+        } else if (after !== null && !(after instanceof Plasmid)) {
             after = new FeatureTree(after);
         }
 
