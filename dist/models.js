@@ -51,13 +51,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Mutation = exports.Mutation = function () {
     function Mutation(before, after) {
-        var _ref = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+        var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+            _ref$marker = _ref.marker,
+            marker = _ref$marker === undefined ? null : _ref$marker,
+            _ref$multiple = _ref.multiple,
+            multiple = _ref$multiple === undefined ? false : _ref$multiple;
 
-        var _ref$marker = _ref.marker;
-        var marker = _ref$marker === undefined ? null : _ref$marker;
-        var _ref$multiple = _ref.multiple;
-        var multiple = _ref$multiple === undefined ? false : _ref$multiple;
         (0, _classCallCheck3.default)(this, Mutation);
+
 
         if (before instanceof Array) {
             before = new (Function.prototype.bind.apply(FeatureTree, [null].concat((0, _toConsumableArray3.default)(before))))();
@@ -118,7 +119,6 @@ var FeatureTree = exports.FeatureTree = function () {
      *
      * @param {...(Phene|Feature|FeatureTree)} contents
      */
-
     function FeatureTree() {
         (0, _classCallCheck3.default)(this, FeatureTree);
 
@@ -132,6 +132,7 @@ var FeatureTree = exports.FeatureTree = function () {
     /**
      * Enumerates all features of the feature tree.
      */
+
 
     (0, _createClass3.default)(FeatureTree, [{
         key: 'features',
@@ -273,23 +274,22 @@ var Plasmid = exports.Plasmid = function (_FeatureTree) {
      * @param {(string|null)} marker selection marker (carried over from insertion).
      * @param {...(Phene|Feature|Fusion)} contents
      */
-
     function Plasmid(name) {
-        var _Object$getPrototypeO;
+        var _ref3;
 
-        var _ref2 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+        var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+            _ref2$site = _ref2.site,
+            site = _ref2$site === undefined ? null : _ref2$site,
+            _ref2$marker = _ref2.marker,
+            marker = _ref2$marker === undefined ? null : _ref2$marker;
 
-        var _ref2$site = _ref2.site;
-        var site = _ref2$site === undefined ? null : _ref2$site;
-        var _ref2$marker = _ref2.marker;
-        var marker = _ref2$marker === undefined ? null : _ref2$marker;
         (0, _classCallCheck3.default)(this, Plasmid);
 
         for (var _len5 = arguments.length, contents = Array(_len5 > 2 ? _len5 - 2 : 0), _key5 = 2; _key5 < _len5; _key5++) {
             contents[_key5 - 2] = arguments[_key5];
         }
 
-        var _this = (0, _possibleConstructorReturn3.default)(this, (_Object$getPrototypeO = (0, _getPrototypeOf2.default)(Plasmid)).call.apply(_Object$getPrototypeO, [this].concat(contents)));
+        var _this = (0, _possibleConstructorReturn3.default)(this, (_ref3 = Plasmid.__proto__ || (0, _getPrototypeOf2.default)(Plasmid)).call.apply(_ref3, [this].concat(contents)));
 
         _this.name = name;
         _this.site = site;
@@ -310,7 +310,7 @@ var Plasmid = exports.Plasmid = function (_FeatureTree) {
                 return false;
             } else {
                 // no way to compare these plasmids except by comparing contents.
-                return (0, _get3.default)((0, _getPrototypeOf2.default)(Plasmid.prototype), 'equals', this).call(this, other);
+                return (0, _get3.default)(Plasmid.prototype.__proto__ || (0, _getPrototypeOf2.default)(Plasmid.prototype), 'equals', this).call(this, other);
             }
         }
     }]);
@@ -324,9 +324,8 @@ var Fusion = exports.Fusion = function (_FeatureTree2) {
      *
      * @param {...Feature} features
      */
-
     function Fusion() {
-        var _Object$getPrototypeO2;
+        var _ref4;
 
         (0, _classCallCheck3.default)(this, Fusion);
 
@@ -334,7 +333,7 @@ var Fusion = exports.Fusion = function (_FeatureTree2) {
             features[_key6] = arguments[_key6];
         }
 
-        return (0, _possibleConstructorReturn3.default)(this, (_Object$getPrototypeO2 = (0, _getPrototypeOf2.default)(Fusion)).call.apply(_Object$getPrototypeO2, [this].concat(features)));
+        return (0, _possibleConstructorReturn3.default)(this, (_ref4 = Fusion.__proto__ || (0, _getPrototypeOf2.default)(Fusion)).call.apply(_ref4, [this].concat(features)));
     }
 
     return Fusion;
@@ -353,20 +352,19 @@ var Feature = exports.Feature = function () {
     // TODO consider new feature type 'phene' that cannot have ranges.
     // TODO consider then a 'RangedFeature' or something like that.
     // TODO ranges are not yet supported upstream.
-
     function Feature(name) {
-        var _ref3 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+        var _ref5 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+            _ref5$type = _ref5.type,
+            type = _ref5$type === undefined ? null : _ref5$type,
+            _ref5$accession = _ref5.accession,
+            accession = _ref5$accession === undefined ? null : _ref5$accession,
+            _ref5$organism = _ref5.organism,
+            organism = _ref5$organism === undefined ? null : _ref5$organism,
+            _ref5$variant = _ref5.variant,
+            variant = _ref5$variant === undefined ? null : _ref5$variant,
+            _ref5$range = _ref5.range,
+            range = _ref5$range === undefined ? null : _ref5$range;
 
-        var _ref3$type = _ref3.type;
-        var type = _ref3$type === undefined ? null : _ref3$type;
-        var _ref3$accession = _ref3.accession;
-        var accession = _ref3$accession === undefined ? null : _ref3$accession;
-        var _ref3$organism = _ref3.organism;
-        var organism = _ref3$organism === undefined ? null : _ref3$organism;
-        var _ref3$variant = _ref3.variant;
-        var variant = _ref3$variant === undefined ? null : _ref3$variant;
-        var _ref3$range = _ref3.range;
-        var range = _ref3$range === undefined ? null : _ref3$range;
         (0, _classCallCheck3.default)(this, Feature);
 
         this.name = name;
@@ -445,7 +443,7 @@ var Feature = exports.Feature = function () {
     }, {
         key: 'match',
         value: function match(other) {
-            var matchVariant = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+            var matchVariant = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
             if (!(other instanceof Feature)) {
                 return false;
@@ -488,16 +486,15 @@ var Phene = exports.Phene = function (_Feature) {
      * @param organism
      * @param variant
      */
-
     function Phene(name) {
-        var _ref4 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+        var _ref6 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+            _ref6$organism = _ref6.organism,
+            organism = _ref6$organism === undefined ? null : _ref6$organism,
+            _ref6$variant = _ref6.variant,
+            variant = _ref6$variant === undefined ? 'wild-type' : _ref6$variant;
 
-        var _ref4$organism = _ref4.organism;
-        var organism = _ref4$organism === undefined ? null : _ref4$organism;
-        var _ref4$variant = _ref4.variant;
-        var variant = _ref4$variant === undefined ? 'wild-type' : _ref4$variant;
         (0, _classCallCheck3.default)(this, Phene);
-        return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Phene).call(this, name, { type: 'phene', organism: organism, variant: variant }));
+        return (0, _possibleConstructorReturn3.default)(this, (Phene.__proto__ || (0, _getPrototypeOf2.default)(Phene)).call(this, name, { type: 'phene', organism: organism, variant: variant }));
     }
 
     (0, _createClass3.default)(Phene, [{
@@ -515,6 +512,7 @@ var Phene = exports.Phene = function (_Feature) {
 
 // TODO make zero-indexed and disallow points
 
+
 var Range = exports.Range = function () {
     /**
      *
@@ -522,9 +520,8 @@ var Range = exports.Range = function () {
      * @param {int} end
      * @param {string} level one of 'coding' and 'protein'
      */
-
     function Range(start, end) {
-        var level = arguments.length <= 2 || arguments[2] === undefined ? 'coding' : arguments[2];
+        var level = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'coding';
         (0, _classCallCheck3.default)(this, Range);
 
         this.start = start;
@@ -552,7 +549,7 @@ var Range = exports.Range = function () {
 
 var Accession = exports.Accession = function () {
     function Accession(identifier) {
-        var database = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+        var database = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
         (0, _classCallCheck3.default)(this, Accession);
 
         this.identifier = identifier;
@@ -575,7 +572,7 @@ var Accession = exports.Accession = function () {
 
 var Organism = exports.Organism = function () {
     function Organism(name) {
-        var aliases = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+        var aliases = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
         (0, _classCallCheck3.default)(this, Organism);
 
         this.name = name;

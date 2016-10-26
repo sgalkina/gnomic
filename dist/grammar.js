@@ -2209,7 +2209,7 @@ var _ref = function () {
   };
 }();
 
-var SyntaxError = _ref.SyntaxError;
-var parse = _ref.parse;
+var SyntaxError = _ref.SyntaxError,
+    parse = _ref.parse;
 exports.SyntaxError = SyntaxError;
 exports.parse = parse;

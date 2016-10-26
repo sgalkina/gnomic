@@ -5,6 +5,7 @@ start
 change_list
     = start:(c:change list_separator { return c })* last:change { return start.concat(last) }
     / c:change { return [c] }
+    / sep* { return [] }
 
 change
     = insertion

@@ -29,8 +29,6 @@ var _createClass2 = require('babel-runtime/helpers/createClass');
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _arguments = arguments;
-
 var _models = require('./models.js');
 
 var _grammar = require('./grammar.js');
@@ -48,14 +46,13 @@ var Genotype = exports.Genotype = function () {
      * @param {(Insertion|Replacement|Deletion|Plasmid)} changes
      * @param parent
      */
-
     function Genotype(changes) {
-        var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+        var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+            _ref$parent = _ref.parent,
+            parent = _ref$parent === undefined ? null : _ref$parent,
+            _ref$fusionStrategy = _ref.fusionStrategy,
+            fusionStrategy = _ref$fusionStrategy === undefined ? FUSION_MATCH_WHOLE : _ref$fusionStrategy;
 
-        var _ref$parent = _ref.parent;
-        var parent = _ref$parent === undefined ? null : _ref$parent;
-        var _ref$fusionStrategy = _ref.fusionStrategy;
-        var fusionStrategy = _ref$fusionStrategy === undefined ? FUSION_MATCH_WHOLE : _ref$fusionStrategy;
         (0, _classCallCheck3.default)(this, Genotype);
 
         this.parent = parent;
@@ -170,6 +167,7 @@ var Genotype = exports.Genotype = function () {
             for (var _iterator3 = (0, _getIterator3.default)(changes), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
                 var change = _step3.value;
 
+
                 // addition of an un-integrated plasmid
                 if (change instanceof _models.Plasmid) {
                     upsert(addedPlasmids, change);
@@ -256,9 +254,9 @@ var Genotype = exports.Genotype = function () {
 
                         try {
                             for (var _iterator6 = (0, _getIterator3.default)(change.after.features()), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-                                var feature = _step6.value;
+                                var _feature = _step6.value;
 
-                                removeOrExclude(removedFeatures, addedFeatures, feature);
+                                removeOrExclude(removedFeatures, addedFeatures, _feature);
                             }
 
                             // fusion-sensitive implementation:
@@ -283,9 +281,9 @@ var Genotype = exports.Genotype = function () {
 
                         try {
                             for (var _iterator7 = (0, _getIterator3.default)(change.after), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-                                var featureOrFusion = _step7.value;
+                                var _featureOrFusion = _step7.value;
 
-                                removeOrExclude(removedFusionFeatures, addedFusionFeatures, featureOrFusion);
+                                removeOrExclude(removedFusionFeatures, addedFusionFeatures, _featureOrFusion);
                             }
                         } catch (err) {
                             _didIteratorError7 = true;
@@ -346,9 +344,9 @@ var Genotype = exports.Genotype = function () {
     (0, _createClass3.default)(Genotype, [{
         key: 'iterChanges',
         value: _regenerator2.default.mark(function iterChanges() {
-            var fusions = _arguments.length <= 0 || _arguments[0] === undefined ? false : _arguments[0];
+            var fusions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
-            var _iteratorNormalCompletion8, _didIteratorError8, _iteratorError8, _iterator8, _step8, feature, _iteratorNormalCompletion9, _didIteratorError9, _iteratorError9, _iterator9, _step9, _iteratorNormalCompletion10, _didIteratorError10, _iteratorError10, _iterator10, _step10, _iteratorNormalCompletion11, _didIteratorError11, _iteratorError11, _iterator11, _step11, _iteratorNormalCompletion12, _didIteratorError12, _iteratorError12, _iterator12, _step12, plasmid, _iteratorNormalCompletion13, _didIteratorError13, _iteratorError13, _iterator13, _step13;
+            var _iteratorNormalCompletion8, _didIteratorError8, _iteratorError8, _iterator8, _step8, feature, _iteratorNormalCompletion9, _didIteratorError9, _iteratorError9, _iterator9, _step9, _feature2, _iteratorNormalCompletion10, _didIteratorError10, _iteratorError10, _iterator10, _step10, _feature3, _iteratorNormalCompletion11, _didIteratorError11, _iteratorError11, _iterator11, _step11, _feature4, _iteratorNormalCompletion12, _didIteratorError12, _iteratorError12, _iterator12, _step12, plasmid, _iteratorNormalCompletion13, _didIteratorError13, _iteratorError13, _iterator13, _step13, _plasmid;
 
             return _regenerator2.default.wrap(function iterChanges$(_context) {
                 while (1) {
@@ -427,9 +425,9 @@ var Genotype = exports.Genotype = function () {
                                 break;
                             }
 
-                            feature = _step9.value;
+                            _feature2 = _step9.value;
                             _context.next = 36;
-                            return _models.Mutation.Del(feature);
+                            return _models.Mutation.Del(_feature2);
 
                         case 36:
                             _iteratorNormalCompletion9 = true;
@@ -487,9 +485,9 @@ var Genotype = exports.Genotype = function () {
                                 break;
                             }
 
-                            feature = _step10.value;
+                            _feature3 = _step10.value;
                             _context.next = 64;
-                            return _models.Mutation.Ins(feature);
+                            return _models.Mutation.Ins(_feature3);
 
                         case 64:
                             _iteratorNormalCompletion10 = true;
@@ -543,9 +541,9 @@ var Genotype = exports.Genotype = function () {
                                 break;
                             }
 
-                            feature = _step11.value;
+                            _feature4 = _step11.value;
                             _context.next = 90;
-                            return _models.Mutation.Del(feature);
+                            return _models.Mutation.Del(_feature4);
 
                         case 90:
                             _iteratorNormalCompletion11 = true;
@@ -655,9 +653,9 @@ var Genotype = exports.Genotype = function () {
                                 break;
                             }
 
-                            plasmid = _step13.value;
+                            _plasmid = _step13.value;
                             _context.next = 142;
-                            return _models.Mutation.Del(plasmid);
+                            return _models.Mutation.Del(_plasmid);
 
                         case 142:
                             _iteratorNormalCompletion13 = true;
@@ -708,19 +706,18 @@ var Genotype = exports.Genotype = function () {
     }, {
         key: 'changes',
         value: function changes() {
-            var fusions = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+            var fusions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
             return (0, _from2.default)(this.iterChanges(fusions));
         }
     }], [{
         key: 'parse',
         value: function parse(string) {
-            var _ref2 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-            var _ref2$parent = _ref2.parent;
-            var parent = _ref2$parent === undefined ? null : _ref2$parent;
-            var _ref2$fusionStrategy = _ref2.fusionStrategy;
-            var fusionStrategy = _ref2$fusionStrategy === undefined ? FUSION_MATCH_WHOLE : _ref2$fusionStrategy;
+            var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+                _ref2$parent = _ref2.parent,
+                parent = _ref2$parent === undefined ? null : _ref2$parent,
+                _ref2$fusionStrategy = _ref2.fusionStrategy,
+                fusionStrategy = _ref2$fusionStrategy === undefined ? FUSION_MATCH_WHOLE : _ref2$fusionStrategy;
 
             return new Genotype((0, _grammar.parse)(string), { parent: parent, fusionStrategy: fusionStrategy });
         }

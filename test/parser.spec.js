@@ -206,5 +206,9 @@ describe('Language parser', function() {
             new Plasmid('p')
         ])
     });
+
+    it('should parse empty genotype strings', function() {
+        expect(parse('')).to.deep.equal([])
+    });
 });
 
