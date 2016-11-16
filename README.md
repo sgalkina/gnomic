@@ -19,7 +19,6 @@ Designation                                 | Grammar expression
 ------------------------------------------- | -------------------------
 `feature` deleted                              | ``-feature``
 `feature` inserted                             | ``+feature``
-`feature` inserted at `site`                   | ``+site::feature``
 `site` replaced with `feature`                 | ``site>feature``
 multiple integration `site` replaced with `feature` | ``site>>feature``
 `feature` of `organism`                        | ``organism/feature``
@@ -27,7 +26,7 @@ multiple integration `site` replaced with `feature` | ``site>>feature``
 `feature` with accession number                | ``feature#GB:123456``
 `feature` from accession number                | ``#GB:123456``
 fusion of `feature1` and `feature2`         | ``feature1:feature2``
-`fusion` inserted at `site` using `marker`   | ``site::fusion::marker+``
+`fusion` inserted at `site` using `marker`   | ``site>fusion::marker+``
 phenotype: wild-type                      | ``phene+`` or ``phene(wild-type)``
 phenotype: mutant                         | ``phene-`` or ``phene`` or ``phene(mutant)``
 selection marker: used (wild-type)         | ``marker+``
@@ -62,7 +61,6 @@ Term           | Description
 | `-abcD` | deletion of feature 'abcD' in the parent strain |
 | `+abcD::His5+` | insertion of feature 'abcD' using the 'His5' selection marker |
 | `efgH>abcD` | insertion of feature 'abcD' at the location of 'efgH', substituting (deleting) 'efgH' |
-| `+efgH::abcD` | insertion of feature 'abcD' at the location of 'efgH' |
 | `abcD(cr)` | presence of gene 'abcD' with 'cr' (i.e. cold-resistant) mutation |
 | `+Pmtr:abcD:Trmt` | insertion of the fusion of features 'Pmtr', 'abcD', 'Trmt'
 | `+promoter.Pmtr:abcD:terminator.Trmt` | insertion of the fusion of features 'Pmtr', 'abcD', 'Trmt' with explicit types
